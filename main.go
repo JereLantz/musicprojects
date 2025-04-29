@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"musiikkiProjektit/views/index"
 	"net/http"
 )
 
@@ -12,7 +13,7 @@ func handleServeIndex(w http.ResponseWriter, r *http.Request){
 	}
 
 	w.WriteHeader(200)
-	w.Write([]byte("hello world"))
+	index.Index().Render(r.Context(), w)
 }
 
 func main(){
