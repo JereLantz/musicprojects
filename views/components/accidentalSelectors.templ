@@ -1,0 +1,14 @@
+package components
+
+templ AccidentalSelectors(keys []string){
+    <div id="selectors">
+    for _, key := range keys{
+        <label for={"selector_" + key}>{key}:</label>
+        <select id={"selector_" + key} name="accidentalSelector">
+            <option value="natural">Natural</option>
+            <option value="sharp">Sharp</option>
+            <option value="flat">Flat</option>
+        </select>
+    }
+    </div>
+}

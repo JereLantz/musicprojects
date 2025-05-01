@@ -4,6 +4,13 @@ import "musiikkiProjektit/views/layouts"
 
 templ KeyQuizPage(){
     @layouts.Base(){
-        <p>keyquiz helloworld</p>
+        <h2>Key quiz</h2>
+        <div id="quiz-area">
+            <p>This is a quiz about recognizing the accidentals of a given key</p>
+            <p>Click start to begin</p>
+            <button hx-post="/keyquiz/start" hx-target="#quiz-area">
+                Start!
+            </button>
+        </div>
     }
 }
