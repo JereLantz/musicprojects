@@ -2,10 +2,8 @@ package main
 
 import (
 	"log"
-	"musiikkiProjektit/views/chordProgress"
+	"musiikkiProjektit/handlers"
 	"musiikkiProjektit/views/index"
-	"musiikkiProjektit/views/keyQuiz"
-	"musiikkiProjektit/views/notes"
 	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -21,18 +19,6 @@ func handleServeIndex(w http.ResponseWriter, r *http.Request){
 	index.Index().Render(r.Context(), w)
 }
 
-func handleServeNotes(w http.ResponseWriter, r *http.Request){
-	notes.NotesPage().Render(r.Context(), w)
-}
-
-func handleServeChordProg(w http.ResponseWriter, r *http.Request){
-	chordprogress.ChordProgPage().Render(r.Context(), w)
-}
-
-func handleServeKeyQuiz(w http.ResponseWriter, r *http.Request){
-	keyquiz.KeyQuizPage().Render(r.Context(), w)
-}
-
 func main(){
 	handler := http.NewServeMux()
 	server := http.Server{
@@ -42,11 +28,12 @@ func main(){
 
 	// Pages
 	handler.HandleFunc("GET /", handleServeIndex)
-	handler.HandleFunc("GET /notes", handleServeNotes)
-	handler.HandleFunc("GET /chordprogress", handleServeChordProg)
-	handler.HandleFunc("GET /keyquiz", handleServeKeyQuiz)
+	handler.HandleFunc("GET /notes", handlers.HandleServeNotes)
+	handler.HandleFunc("GET /chordprogress", handlers.HandleServeChordProg)
+	handler.HandleFunc("GET /keyquiz", handlers.HandleServeKeyQuiz)
 
 	// API
+	handler.HandleFunc("POST /keyquiz/start", handlers.HandleStartKeyQuiz)
 
 	// Files
 
