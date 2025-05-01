@@ -36,7 +36,7 @@ func KeyQuiz(key string, orderedNotes []string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(key)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/keyquiz.templ`, Line: 7, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/keyquiz.templ`, Line: 6, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -54,15 +54,15 @@ func KeyQuiz(key string, orderedNotes []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = keyQuizBtn("Set all natural", templ.Attributes{"hx-post": "/fds"}).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = keyQuizBtn("Set all natural", templ.Attributes{"hx-on:click": "setSelectorsNatural()"}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = keyQuizBtn("Set all sharp", templ.Attributes{"hx-post": "/fds"}).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = keyQuizBtn("Set all sharp", templ.Attributes{"hx-on:click": "setSelectorsSharp()"}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = keyQuizBtn("Set all flat", templ.Attributes{"hx-post": "/fds"}).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = keyQuizBtn("Set all flat", templ.Attributes{"hx-on:click": "setSelectorsFlat()"}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

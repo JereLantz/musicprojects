@@ -36,6 +36,7 @@ func main(){
 	handler.HandleFunc("POST /keyquiz/start", handlers.HandleStartKeyQuiz)
 
 	// Files
+	handler.Handle("GET /index.js", http.FileServer(http.Dir("./")))
 
 	log.Printf("server started on port %s\n", server.Addr)
 	log.Fatal(server.ListenAndServe())

@@ -2,15 +2,14 @@ package components
 
 
 templ KeyQuiz(key string, orderedNotes []string){
-    //NOTE: tää tarttee inputtina keyn ainakin
     <form hx-post="/keyquiz/checkanswer">
         <p>Select the correct sharps/flats for the key "{key}"</p>
         @AccidentalSelectors(orderedNotes)
 
         <div id="set-buttons">
-            @keyQuizBtn("Set all natural", templ.Attributes{"hx-post":"/fds"})
-            @keyQuizBtn("Set all sharp", templ.Attributes{"hx-post":"/fds"})
-            @keyQuizBtn("Set all flat", templ.Attributes{"hx-post":"/fds"})
+            @keyQuizBtn("Set all natural", templ.Attributes{"hx-on:click":"setSelectorsNatural()"})
+            @keyQuizBtn("Set all sharp", templ.Attributes{"hx-on:click":"setSelectorsSharp()"})
+            @keyQuizBtn("Set all flat", templ.Attributes{"hx-on:click":"setSelectorsFlat()"})
         </div>
 
         <button type="submit">
