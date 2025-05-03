@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+	"log"
 	"math/rand/v2"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/keyQuiz"
@@ -44,5 +46,91 @@ func HandleStartKeyQuiz(w http.ResponseWriter, r *http.Request){
 		quizNotes = append(quizNotes, possibleNotes[(i + noteOffset) % len(possibleNotes)])
 	}
 
+	w.Header().Set("Content-Type","text/html")
 	components.KeyQuiz(randomKey, quizNotes).Render(r.Context(), w)
+}
+
+func HandleCheckQuiz(w http.ResponseWriter, r *http.Request){
+	err := r.ParseForm()
+	if err != nil {
+		w.WriteHeader(400)
+		log.Printf("error parsing the checkquiz form %s\n", err)
+		return
+	}
+
+	accidentals := r.Form["accidentalSelector"]
+	currentKey := r.FormValue("currentKey")
+
+	answerCorrect, err := checkAnswer(currentKey, accidentals)
+	if err != nil {
+		w.WriteHeader(500)
+		log.Printf("Error parsing the answer: %s\n", err)
+		return
+	}
+	components.KeyQuizCheckResp(answerCorrect).Render(r.Context(), w)
+}
+
+func checkAnswer(key string, accidentals []string) (bool, error){
+	pureNote := strings.Trim(key, "#b")
+	noteOffset := 0
+	for _, note := range possibleNotes{
+		if note == pureNote{
+			break
+		}
+		noteOffset ++
+	}
+
+    switch key{
+    case "C","G","D","A","E","B","F#","C#":
+		accidentalsInThis := accidentalOrder.Sharps[:correctAccidentalAmounts[key]]
+
+		for i, accidentalToCheck := range accidentals{
+			shouldBeAccidental := false
+			currentNote := possibleNotes[(noteOffset+i) % len(possibleNotes)]
+
+			// loop every accidental and note to check if it should be accidental
+			for _, acc := range accidentalsInThis{
+				if currentNote == acc {
+					shouldBeAccidental = true
+				}
+
+				// break if the note is correctly identified as sharp
+				if currentNote == acc && accidentalToCheck == "sharp"{
+					break
+				}
+			}
+
+			if accidentalToCheck != "natural" && !shouldBeAccidental {
+				return false, nil
+			}
+		}
+		return true, nil
+
+    case "F","Bb","Eb","Ab","Db","Gb","Cb":
+		accidentalsInThis := accidentalOrder.Flats[:correctAccidentalAmounts[key]]
+
+		for i, accidentalToCheck := range accidentals{
+			shouldBeAccidental := false
+			currentNote := possibleNotes[(noteOffset+i) % len(possibleNotes)]
+
+			// loop every accidental and note to check if it should be accidental
+			for _, acc := range accidentalsInThis{
+				if currentNote == acc {
+					shouldBeAccidental = true
+				}
+
+				// break if the note is correctly identified as flat
+				if currentNote == acc && accidentalToCheck == "flat"{
+					break
+				}
+			}
+
+			if accidentalToCheck != "natural" && !shouldBeAccidental {
+				return false, nil
+			}
+		}
+		return true, nil
+	default:
+		return false, errors.New("Invalid key")
+	}
 }

@@ -1,9 +1,9 @@
 package components
 
-
 templ KeyQuiz(key string, orderedNotes []string){
-    <form hx-post="/keyquiz/checkanswer">
+    <form hx-post="/keyquiz/checkanswer" hx-target="#submit-answer-container" hx-swap="innerHTML">
         <p>Select the correct sharps/flats for the key "{key}"</p>
+        <input type="hidden" name="currentKey" value={key}></input>
         @AccidentalSelectors(orderedNotes)
 
         <div id="set-buttons">
@@ -12,8 +12,10 @@ templ KeyQuiz(key string, orderedNotes []string){
             @keyQuizBtn("Set all flat", templ.Attributes{"hx-on:click":"setSelectorsFlat()"})
         </div>
 
-        <button type="submit">
-            Confirm
-        </button>
+        <div id="submit-answer-container">
+            <button type="submit">
+                Confirm
+            </button>
+        </div>
     </form>
 }

@@ -1,0 +1,15 @@
+package components
+
+templ KeyQuizCheckResp(correct bool){
+    if correct {
+        <p>Correct</p>
+        <button type="button" hx-post="/keyquiz/newquiz" hx-target="#quiz-area">
+            Next question
+        </button>
+    } else{
+        <p>Incorrect</p>
+        <button type="submit">
+            Try again
+        </button>
+    }
+}
