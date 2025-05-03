@@ -35,6 +35,7 @@ func main(){
 	// API
 	handler.HandleFunc("POST /keyquiz/start", handlers.HandleStartKeyQuiz)
 	handler.HandleFunc("POST /keyquiz/checkanswer", handlers.HandleCheckQuiz)
+	handler.HandleFunc("POST /keyquiz/newquiz", handlers.HandleStartKeyQuiz)
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./")))
