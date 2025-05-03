@@ -94,13 +94,17 @@ func checkAnswer(key string, accidentals []string) (bool, error){
 					shouldBeAccidental = true
 				}
 
-				// break if the note is correctly identified as sharp
+				// break if the note is correctly identified as flat
 				if currentNote == acc && accidentalToCheck == "sharp"{
 					break
 				}
 			}
 
-			if accidentalToCheck != "natural" && !shouldBeAccidental {
+			if accidentalToCheck == "natural" && shouldBeAccidental {
+				return false, nil
+			}
+
+			if accidentalToCheck == "sharp" && !shouldBeAccidental {
 				return false, nil
 			}
 		}
@@ -125,7 +129,11 @@ func checkAnswer(key string, accidentals []string) (bool, error){
 				}
 			}
 
-			if accidentalToCheck != "natural" && !shouldBeAccidental {
+			if accidentalToCheck == "natural" && shouldBeAccidental {
+				return false, nil
+			}
+
+			if accidentalToCheck == "flat" && !shouldBeAccidental {
 				return false, nil
 			}
 		}
