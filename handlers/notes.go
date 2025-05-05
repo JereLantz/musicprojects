@@ -5,7 +5,13 @@ import (
 	"net/http"
 )
 
+type Note struct {
+	Id int
+	Title string
+	Note string
+}
+
 func HandleServeNotes(w http.ResponseWriter, r *http.Request){
-	notes.NotesPage().Render(r.Context(), w)
+	notes.NotesPage(true).Render(r.Context(), w)
 }
 

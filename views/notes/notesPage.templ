@@ -2,10 +2,19 @@ package notes
 
 import "musiikkiProjektit/views/layouts"
 
-templ NotesPage(){
+templ NotesPage(loggedIn bool){
     @layouts.Base(){
-        <p>
-            hello world from notes
-        </p>
+        <h2>Notes</h2>
+        <div id="note-container">
+        if loggedIn {
+            <p hx-trigger="load" hx-post="/notes/api/getsavednotes" hx-swap="#note-container">
+                Fetching saved notes...
+            </p>
+        }else{
+            <p>
+                hello world from notes not logged in
+            </p>
+        }
+        </div>
     }
 }
