@@ -31,6 +31,7 @@ func main(){
 	handler.HandleFunc("GET /notes", handlers.HandleServeNotes)
 	handler.HandleFunc("GET /chordprogress", handlers.HandleServeChordProg)
 	handler.HandleFunc("GET /keyquiz", handlers.HandleServeKeyQuiz)
+	handler.HandleFunc("GET /login", handlers.HandleLoginPage)
 
 	// API
 	handler.HandleFunc("POST /keyquiz/start", handlers.HandleStartKeyQuiz)

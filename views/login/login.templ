@@ -1,0 +1,19 @@
+package login
+
+import "musiikkiProjektit/views/layouts"
+
+templ LoginPage(){
+    @layouts.Base(){
+        <div id="login-container">
+            <form>
+                <label for="login-uname">Username:</label>
+                <input type="text" name="login-uname" id="login-uname" placeholder="Username"/>
+                <br/>
+                <label for="login-passwd">Password:</label>
+                <input name="login-passwd" id="login-passwd" type="password" placeholder="Password"/>
+                <br/>
+                <button type="submit">Log in</button>
+            </form>
+        </div>
+    }
+}
