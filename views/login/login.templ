@@ -4,8 +4,9 @@ import "musiikkiProjektit/views/layouts"
 
 templ LoginPage(){
     @layouts.Base(){
+        <h2>Log in</h2>
         <div id="login-container">
-            <form>
+            <form hx-post="/login" hx-target="#login-container">
                 <label for="login-uname">Username:</label>
                 <input type="text" name="login-uname" id="login-uname" placeholder="Username"/>
                 <br/>

@@ -43,7 +43,7 @@ func LoginPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"login-container\"><form><label for=\"login-uname\">Username:</label> <input type=\"text\" name=\"login-uname\" id=\"login-uname\" placeholder=\"Username\"><br><label for=\"login-passwd\">Password:</label> <input name=\"login-passwd\" id=\"login-passwd\" type=\"password\" placeholder=\"Password\"><br><button type=\"submit\">Log in</button></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>Log in</h2><div id=\"login-container\"><form hx-post=\"/login\" hx-target=\"#login-container\"><label for=\"login-uname\">Username:</label> <input type=\"text\" name=\"login-uname\" id=\"login-uname\" placeholder=\"Username\"><br><label for=\"login-passwd\">Password:</label> <input name=\"login-passwd\" id=\"login-passwd\" type=\"password\" placeholder=\"Password\"><br><button type=\"submit\">Log in</button></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

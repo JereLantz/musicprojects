@@ -51,8 +51,7 @@ func initializeDBSchema(db *sql.DB) error{
 func initializeUsersSchema(db *sql.DB) error{
 	initQuery := `CREATE TABLE IF NOT EXISTS users(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		username text NOT NULL,
-		salt text NOT NULL,
+		username text UNIQUE NOT NULL,
 		password text NOT NULL
 	);`
 
@@ -108,6 +107,9 @@ func main(){
 	handler.HandleFunc("POST /keyquiz/start", handlers.HandleStartKeyQuiz)
 	handler.HandleFunc("POST /keyquiz/checkanswer", handlers.HandleCheckQuiz)
 	handler.HandleFunc("POST /keyquiz/newquiz", handlers.HandleStartKeyQuiz)
+	handler.HandleFunc("POST /login", func(w http.ResponseWriter, r *http.Request) {
+	handlers.HandleLogin(db, w,r)
+	})
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./")))
