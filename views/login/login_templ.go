@@ -9,6 +9,8 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "musiikkiProjektit/views/layouts"
+import "musiikkiProjektit/views/components"
+import "musiikkiProjektit/utils"
 
 func LoginPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -43,7 +45,15 @@ func LoginPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>Log in</h2><div id=\"login-container\"><form hx-post=\"/login\" hx-target=\"#login-container\"><label for=\"login-uname\">Username:</label> <input type=\"text\" name=\"login-uname\" id=\"login-uname\" placeholder=\"Username\"><br><label for=\"login-passwd\">Password:</label> <input name=\"login-passwd\" id=\"login-passwd\" type=\"password\" placeholder=\"Password\"><br><button type=\"submit\">Log in</button></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>Log in</h2><div id=\"login-container\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.LoginForm(false, utils.Credentials{}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

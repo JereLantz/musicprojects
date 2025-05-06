@@ -1,20 +1,14 @@
 package login
 
 import "musiikkiProjektit/views/layouts"
+import "musiikkiProjektit/views/components"
+import "musiikkiProjektit/utils"
 
 templ LoginPage(){
     @layouts.Base(){
         <h2>Log in</h2>
         <div id="login-container">
-            <form hx-post="/login" hx-target="#login-container">
-                <label for="login-uname">Username:</label>
-                <input type="text" name="login-uname" id="login-uname" placeholder="Username"/>
-                <br/>
-                <label for="login-passwd">Password:</label>
-                <input name="login-passwd" id="login-passwd" type="password" placeholder="Password"/>
-                <br/>
-                <button type="submit">Log in</button>
-            </form>
+            @components.LoginForm(false, utils.Credentials{})
         </div>
     }
 }

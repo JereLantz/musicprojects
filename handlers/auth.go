@@ -3,6 +3,8 @@ package handlers
 import (
 	"database/sql"
 	"log"
+	"musiikkiProjektit/utils"
+	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/login"
 	"net/http"
 
@@ -15,6 +17,7 @@ func HandleLoginPage(w http.ResponseWriter, r *http.Request){
 
 
 func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
+	var inputtedCreds utils.Credentials
 	err := r.ParseForm()
 	if err != nil {
 		w.WriteHeader(500)
@@ -22,30 +25,32 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	username := r.FormValue("login-uname")
-	password := r.FormValue("login-passwd")
-	err = checkUserCredentials(db, username, password)
+	inputtedCreds.Username = r.FormValue("login-uname")
+	inputtedCreds.Password = r.FormValue("login-passwd")
+	err = checkUserCredentials(db, inputtedCreds)
 
 	if err != nil {
-		log.Println("failed")
-		w.WriteHeader(400)
+		log.Printf("Failed login, %s\n", err)
+		components.LoginForm(true, inputtedCreds).Render(r.Context(), w)
 	}else{
-		log.Println("Success")
+		log.Printf("Successfull login %s\n", inputtedCreds.Username)
+		w.Header().Add("Hx-Retarget", "#main-content")
+		components.LoginWelcomeMsg(inputtedCreds.Username).Render(r.Context(), w)
 	}
 }
 
-func checkUserCredentials(db *sql.DB, uname, passwd string) error{
+func checkUserCredentials(db *sql.DB, credentials utils.Credentials) error{
 	fetchPasswdQuery := `SELECT password FROM users WHERE username = ?;`
 	var storedPasswd []byte
 
-	passRow := db.QueryRow(fetchPasswdQuery, uname)
+	passRow := db.QueryRow(fetchPasswdQuery, credentials.Username)
 
 	err := passRow.Scan(&storedPasswd)
 	if err != nil {
 		return err
 	}
 
-	err = bcrypt.CompareHashAndPassword(storedPasswd, []byte(passwd))
+	err = bcrypt.CompareHashAndPassword(storedPasswd, []byte(credentials.Password))
 
 	return err
 }

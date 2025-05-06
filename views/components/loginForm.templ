@@ -1,0 +1,21 @@
+package components
+
+import "musiikkiProjektit/utils"
+
+templ LoginForm(failedLogin bool, credentials utils.Credentials){
+    <form hx-post="/login" hx-target="#login-container">
+        <label for="login-uname">Username:</label>
+        <input type="text" value={credentials.Username} name="login-uname" id="login-uname" placeholder="Username"/>
+        <br/>
+        <label for="login-passwd">Password:</label>
+        <input name="login-passwd" id="login-passwd" value={credentials.Password} type="password" placeholder="Password"/>
+        <br/>
+        <button type="submit">Log in</button>
+    </form>
+
+    if failedLogin{
+        <p>
+            Login failed
+        </p>
+    }
+}
