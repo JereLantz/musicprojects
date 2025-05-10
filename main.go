@@ -97,11 +97,12 @@ func main(){
 	}
 
 	// Pages
-	handler.HandleFunc("GET /", handleServeIndex)
-	handler.HandleFunc("GET /notes", handlers.HandleServeNotes)
-	handler.HandleFunc("GET /chordprogress", handlers.HandleServeChordProg)
-	handler.HandleFunc("GET /keyquiz", handlers.HandleServeKeyQuiz)
-	handler.HandleFunc("GET /login", handlers.HandleLoginPage)
+	//handler.HandleFunc("GET /", handleServeIndex)
+	handler.HandleFunc("GET /", handlers.HandleSessionMiddleware(handleServeIndex))
+	handler.HandleFunc("GET /notes", handlers.HandleSessionMiddleware(handlers.HandleServeNotes))
+	handler.HandleFunc("GET /chordprogress", handlers.HandleSessionMiddleware(handlers.HandleServeChordProg))
+	handler.HandleFunc("GET /keyquiz", handlers.HandleSessionMiddleware(handlers.HandleServeKeyQuiz))
+	handler.HandleFunc("GET /login", handlers.HandleSessionMiddleware(handlers.HandleLoginPage))
 
 	// API
 	handler.HandleFunc("POST /keyquiz/start", handlers.HandleStartKeyQuiz)
