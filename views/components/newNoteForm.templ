@@ -1,0 +1,21 @@
+package components
+
+templ NewNoteForm(errors []string){
+    <div id="new-note-container">
+        <form hx-post="/api/notes/addnew" hx-target="#new-note-container" hx-swap="outerHTML">
+            <input required name="newNoteTitle" type="text" placeholder="Title">
+            <br/>
+            <textarea required name="newNote" rows="10" cols="100" placeholder="Add note"/>
+            <br/>
+            <button type="submit">Add note</button>
+        </form>
+
+        if len(errors) > 0{
+            <ul>
+            for _, error := range errors{
+                <li>{error}</li>
+            }
+            </ul>
+        }
+    </div>
+}
