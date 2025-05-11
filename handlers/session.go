@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+const SESSION_TOKEN_NAME = "session_token"
+
 var Sessions = map[string]Session{}
 
 type Session struct {
@@ -23,8 +25,8 @@ func (s Session) isSessionExpired() bool{
 }
 
 /*
-Creates new session and stores it in memory from the Credetials stuct.
-Then returns the generated session id
+Creates new session in memory from the Credetials stuct.
+Returns the generated session id
 */
 func createSession(creds utils.Credentials) (string, error){
 	sessionToken, err := generateSessionId(64)
@@ -43,6 +45,9 @@ func createSession(creds utils.Credentials) (string, error){
 	return sessionToken, nil
 }
 
+/*
+Generates random string the length of len
+*/
 func generateSessionId(len int) (string, error){
 	b := make([]byte, len)
 	_, err := io.ReadFull(rand.Reader, b)
@@ -57,8 +62,7 @@ func generateSessionId(len int) (string, error){
 Check whether the request contains a valid session.
 */
 func checkForValidSession(r *http.Request) (bool, error){
-	//TODO:
-	cookie, err := r.Cookie("session_token")
+	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
 	if err != nil {
 		if err == http.ErrNoCookie{
 			return false, nil
@@ -77,14 +81,31 @@ func checkForValidSession(r *http.Request) (bool, error){
 		return false, nil
 	}
 
-	refreshSession()
-
 	return true, nil
 }
 
-func refreshSession(){
-	//TODO:
-	log.Println("refresh")
+func refreshSession(w http.ResponseWriter, r *http.Request) error{
+	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	if err != nil{
+		return err
+	}
+	token := cookie.Value
+
+	newExpiry := time.Now().Add(1 * time.Hour)
+	oldSessionData := Sessions[token]
+	delete(Sessions, token)
+
+	oldSessionData.Expiry = newExpiry
+	Sessions[token] = oldSessionData
+
+	http.SetCookie(w, &http.Cookie{
+		Name: SESSION_TOKEN_NAME,
+		Value: token,
+		Expires: newExpiry,
+		SameSite: http.SameSiteStrictMode,
+	})
+
+	return nil
 }
 
 func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
@@ -97,9 +118,13 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 		}
 
 		if hasSession{
-			refreshSession()
+			err = refreshSession(w, r)
+			if err != nil {
+				log.Printf("Failed to fetch token for refreshing time: %s\n", err)
+				return
+			}
 		} else{
-			token, err := createSession(utils.Credentials{})
+			newToken, err := createSession(utils.Credentials{})
 			if err != nil {
 				w.WriteHeader(500)
 				log.Printf("Failed to create session: %s\n", err)
@@ -107,9 +132,9 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 			}
 
 			http.SetCookie(w, &http.Cookie{
-				Name: "session_token",
-				Value: token,
-				Expires: Sessions[token].Expiry,
+				Name: SESSION_TOKEN_NAME,
+				Value: newToken,
+				Expires: Sessions[newToken].Expiry,
 				SameSite: http.SameSiteStrictMode,
 			})
 		}
