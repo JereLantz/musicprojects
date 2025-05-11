@@ -118,6 +118,7 @@ func main(){
 	handler.HandleFunc("POST /login", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HandleLogin(db, w,r)
 	})
+	handler.HandleFunc("GET /logout", handlers.HandleLogout)
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./")))

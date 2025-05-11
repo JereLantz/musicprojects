@@ -63,3 +63,16 @@ func checkUserCredentials(db *sql.DB, credentials utils.Credentials) error{
 
 	return err
 }
+
+func HandleLogout(w http.ResponseWriter, r *http.Request){
+	//TODO:
+	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	if err != nil {
+		w.WriteHeader(500)
+		log.Printf("Failed get the session cookie to logout %s\n", err)
+		return
+	}
+
+	delete(Sessions, cookie.Value)
+	http.Redirect(w,r,"/", 303)
+}
