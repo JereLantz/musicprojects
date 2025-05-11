@@ -12,17 +12,7 @@ import (
 
 const SESSION_TOKEN_NAME = "session_token"
 
-var Sessions = map[string]Session{}
-
-type Session struct {
-	LoggedIn bool
-	Username string
-	Expiry time.Time
-}
-
-func (s Session) isSessionExpired() bool{
-	return s.Expiry.Before(time.Now())
-}
+var Sessions = map[string]utils.Session{}
 
 /*
 Creates new session in memory from the Credetials stuct.
@@ -36,7 +26,7 @@ func createSession(creds utils.Credentials) (string, error){
 
 	expiresAt := time.Now().Add(1 * time.Hour)
 
-	Sessions[sessionToken] = Session{
+	Sessions[sessionToken] = utils.Session{
 		LoggedIn: false,
 		Username: creds.Username,
 		Expiry: expiresAt,
@@ -76,7 +66,7 @@ func checkForValidSession(r *http.Request) (bool, error){
 		return false, nil
 	}
 
-	if reqSession.isSessionExpired(){
+	if reqSession.IsSessionExpired(){
 		delete(Sessions, sessionToken)
 		return false, nil
 	}

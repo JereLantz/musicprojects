@@ -1,9 +1,10 @@
 package chordprogress
 
 import "musiikkiProjektit/views/layouts"
+import "musiikkiProjektit/utils"
 
-templ ChordProgPage(){
-    @layouts.Base(){
+templ ChordProgPage(sessionData utils.Session){
+    @layouts.Base(sessionData){
         <p>
             Helloworld chordprog
         </p>

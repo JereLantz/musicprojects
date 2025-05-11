@@ -16,9 +16,16 @@ func handleServeIndex(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(404)
 		return
 	}
+	cookie, err := r.Cookie(handlers.SESSION_TOKEN_NAME)
+	if err != nil{
+		log.Printf("Failed to fetch the session for displaying the home. %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
+	sessionData := handlers.Sessions[cookie.Value]
 
 	w.WriteHeader(200)
-	index.Index().Render(r.Context(), w)
+	index.Index(sessionData).Render(r.Context(), w)
 }
 
 func dbConnect() (*sql.DB, error){
@@ -109,7 +116,7 @@ func main(){
 	handler.HandleFunc("POST /keyquiz/checkanswer", handlers.HandleCheckQuiz)
 	handler.HandleFunc("POST /keyquiz/newquiz", handlers.HandleStartKeyQuiz)
 	handler.HandleFunc("POST /login", func(w http.ResponseWriter, r *http.Request) {
-	handlers.HandleLogin(db, w,r)
+		handlers.HandleLogin(db, w,r)
 	})
 
 	// Files

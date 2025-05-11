@@ -4,8 +4,8 @@ import "musiikkiProjektit/views/layouts"
 import "musiikkiProjektit/views/components"
 import "musiikkiProjektit/utils"
 
-templ LoginPage(){
-    @layouts.Base(){
+templ LoginPage(sessionData utils.Session){
+    @layouts.Base(sessionData){
         <h2>Log in</h2>
         <div id="login-container">
             @components.LoginForm(false, utils.Credentials{})

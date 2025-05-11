@@ -1,8 +1,9 @@
 package layouts
 
 import "musiikkiProjektit/views/components"
+import "musiikkiProjektit/utils"
 
-templ Base(){
+templ Base(sessionData utils.Session){
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -10,12 +11,12 @@ templ Base(){
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Music</title>
             <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-            <script src="https://unpkg.com/htmx-ext-response-targets@2.0.2"></script>
+            <!--<script src="https://unpkg.com/htmx-ext-response-targets@2.0.2"></script>-->
             <script src="/index.js"></script>
             <!--<link rel="stylesheet" href="/styles/index.css">-->
         </head>
         <body hx-ext="response-targets">
-            @components.Header()
+            @components.Header(sessionData)
             <main id="main-content" class="main-content">
                 { children... }
             </main>

@@ -12,7 +12,14 @@ import (
 )
 
 func HandleLoginPage(w http.ResponseWriter, r *http.Request){
-	login.LoginPage().Render(r.Context(), w)
+	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	if err != nil{
+		log.Printf("Failed to fetch the session for displaying the login page. %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
+	sessionData := Sessions[cookie.Value]
+	login.LoginPage(sessionData).Render(r.Context(), w)
 }
 
 

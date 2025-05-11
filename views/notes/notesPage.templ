@@ -1,12 +1,13 @@
 package notes
 
 import "musiikkiProjektit/views/layouts"
+import "musiikkiProjektit/utils"
 
-templ NotesPage(loggedIn bool){
-    @layouts.Base(){
+templ NotesPage(sessionData utils.Session){
+    @layouts.Base(sessionData){
         <h2>Notes</h2>
         <div id="note-container">
-        if loggedIn {
+        if sessionData.LoggedIn {
             <p hx-trigger="load" hx-post="/notes/api/getsavednotes" hx-swap="#note-container">
                 Fetching saved notes...
             </p>

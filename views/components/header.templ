@@ -1,10 +1,18 @@
 package components
 
-templ Header(){
+import "musiikkiProjektit/utils"
+
+templ Header(sessionData utils.Session){
     <div>
-        <a href="/login">
-            Log in
-        </a>
+        if sessionData.LoggedIn{
+            <a href="/logout">
+                Log out
+            </a>
+        } else {
+            <a href="/login">
+                Log in
+            </a>
+        }
     </div>
 
     <header>

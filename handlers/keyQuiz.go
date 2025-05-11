@@ -25,7 +25,15 @@ var correctAccidentalAmounts = map[string]int{"C":0,"G":1,"F":1,"D":2,"Bb":2,"A"
 
 
 func HandleServeKeyQuiz(w http.ResponseWriter, r *http.Request){
-	keyquiz.KeyQuizPage().Render(r.Context(), w)
+	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	if err != nil{
+		log.Printf("Failed to fetch the session for displaying the key quiz page. %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
+	sessionData := Sessions[cookie.Value]
+
+	keyquiz.KeyQuizPage(sessionData).Render(r.Context(), w)
 }
 
 func HandleStartKeyQuiz(w http.ResponseWriter, r *http.Request){
