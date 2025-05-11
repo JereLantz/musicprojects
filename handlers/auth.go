@@ -29,14 +29,16 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	inputtedCreds.Password = r.FormValue("login-passwd")
 	err = checkUserCredentials(db, inputtedCreds)
 
-	if err != nil {
-		log.Printf("Failed login, %s\n", err)
-		components.LoginForm(true, inputtedCreds).Render(r.Context(), w)
-	}else{
+	if err == nil {
 		log.Printf("Successfull login %s\n", inputtedCreds.Username)
 		w.Header().Add("Hx-Retarget", "#main-content")
 		components.LoginWelcomeMsg(inputtedCreds.Username).Render(r.Context(), w)
+		SessionLogin(r, inputtedCreds)
+		return
 	}
+
+	log.Printf("Failed login, %s\n", err)
+	components.LoginForm(true, inputtedCreds).Render(r.Context(), w)
 }
 
 func checkUserCredentials(db *sql.DB, credentials utils.Credentials) error{

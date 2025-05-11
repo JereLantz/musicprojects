@@ -142,3 +142,23 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 		f(w,r)
 	}
 }
+
+/*
+Modifies the session in memory to have the user logged id.
+*/
+func SessionLogin(r *http.Request, creds utils.Credentials) error{
+	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	if err != nil {
+		log.Printf("Failed to fetch the request cookie for logging in and modifying the session %s\n", err)
+		return err
+	}
+	token := cookie.Value
+	sessionDetails := Sessions[token]
+	delete(Sessions, token)
+
+	sessionDetails.LoggedIn = true
+	sessionDetails.Username = creds.Username
+
+	Sessions[token] = sessionDetails
+	return nil
+}
