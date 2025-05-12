@@ -7,6 +7,7 @@ import (
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/login"
 	"net/http"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -65,7 +66,6 @@ func checkUserCredentials(db *sql.DB, credentials utils.Credentials) error{
 }
 
 func HandleLogout(w http.ResponseWriter, r *http.Request){
-	//TODO:
 	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
 	if err != nil {
 		w.WriteHeader(500)
@@ -74,5 +74,11 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 	}
 
 	delete(Sessions, cookie.Value)
+	
+	http.SetCookie(w, &http.Cookie{
+		Name: SESSION_TOKEN_NAME,
+		Value: "",
+		Expires: time.Now(),
+	})
 	http.Redirect(w,r,"/", 303)
 }

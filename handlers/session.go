@@ -15,7 +15,8 @@ const SESSION_TOKEN_NAME = "session_token"
 var Sessions = map[string]utils.Session{}
 
 /*
-Creates new session in memory from the Credetials stuct.
+Creates new session in memory from the Credetials stuct. Can be Credentials struct with null values
+if the user is not signed in.
 Returns the generated session id
 */
 func createSession(creds utils.Credentials) (string, error){
