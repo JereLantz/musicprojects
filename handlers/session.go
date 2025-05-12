@@ -128,6 +128,12 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 				Expires: Sessions[newToken].Expiry,
 				SameSite: http.SameSiteStrictMode,
 			})
+			r.AddCookie(&http.Cookie{
+				Name: SESSION_TOKEN_NAME,
+				Value: newToken,
+				Expires: Sessions[newToken].Expiry,
+				SameSite: http.SameSiteStrictMode,
+			})
 		}
 
 		f(w,r)
