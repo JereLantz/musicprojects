@@ -165,11 +165,14 @@ func CleanupOutdatedSessions(interval time.Duration){
 	defer ticker.Stop()
 
 	for range ticker.C{
+		var count int
 		log.Println("Cleaning outdated sessions...")
 		for token, session := range Sessions{
 			if session.IsSessionExpired(){
 				delete(Sessions, token)
+				count ++
 			}
 		}
+		log.Printf("Cleaned %d outdated sessions", count)
 	}
 }
