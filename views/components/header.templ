@@ -5,35 +5,24 @@ import "musiikkiProjektit/utils"
 templ Header(sessionData utils.Session){
     <div>
         if sessionData.LoggedIn{
-            <a href="/logout">
-                Log out
-            </a>
+            <a href="/logout">Log out</a>
+            <span>{sessionData.Username}</span>
         } else {
-            <a href="/login">
-                Log in
-            </a>
+            <a href="/login">Log in</a>
         }
     </div>
 
     <header>
         <h1>
-            <a href="/">
-                Musiikki opiskelu
-            </a>
+            <a href="/">Musiikki opiskelu</a>
         </h1>
     </header>
 
     <nav>
-        <a href="/keyquiz">
-            Key quiz
-        </a>
+        <a href="/keyquiz">Key quiz</a>
 
-        <a href="/chordprogress">
-            Chord progress
-        </a>
+        <a href="/chordprogress">Chord progress</a>
 
-        <a href="/notes">
-            Notes
-        </a>
+        <a href="/notes">Notes</a>
     </nav>
 }

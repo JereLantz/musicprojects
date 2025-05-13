@@ -39,9 +39,13 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 
 	if err == nil {
 		log.Printf("Successfull login %s\n", inputtedCreds.Username)
-		w.Header().Add("Hx-Retarget", "#main-content")
-		components.LoginWelcomeMsg(inputtedCreds.Username).Render(r.Context(), w)
-		SessionLogin(r, inputtedCreds)
+		err = SessionLogin(r, inputtedCreds)
+		if err != nil {
+			w.WriteHeader(500)
+			log.Printf("error modifying the session with login details: %s\n", err)
+			return
+		}
+		w.Header().Add("Hx-Redirect", "/")
 		return
 	}
 
