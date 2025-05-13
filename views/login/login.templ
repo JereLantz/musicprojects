@@ -8,7 +8,13 @@ templ LoginPage(sessionData utils.Session){
     @layouts.Base(sessionData){
         <h2>Log in</h2>
         <div id="login-container">
-            @components.LoginForm(false, utils.Credentials{})
+            if sessionData.LoggedIn{
+                <h3>
+                    Already logged in as "{sessionData.Username}".
+                </h3>
+            }else{
+                @components.LoginForm(false, utils.Credentials{})
+            }
         </div>
     }
 }
