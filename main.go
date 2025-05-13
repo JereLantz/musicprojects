@@ -7,6 +7,7 @@ import (
 	"musiikkiProjektit/handlers"
 	"musiikkiProjektit/views/index"
 	"net/http"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -83,6 +84,10 @@ func initializeNotesSchema(db *sql.DB) error{
 	}
 
 	return nil
+}
+
+func init(){
+	go handlers.CleanupOutdatedSessions(30 * time.Minute)
 }
 
 func main(){

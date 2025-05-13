@@ -159,3 +159,17 @@ func SessionLogin(r *http.Request, creds utils.Credentials) error{
 	Sessions[token] = sessionDetails
 	return nil
 }
+
+func CleanupOutdatedSessions(interval time.Duration){
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+
+	for range ticker.C{
+		log.Println("Cleaning outdated sessions...")
+		for token, session := range Sessions{
+			if session.IsSessionExpired(){
+				delete(Sessions, token)
+			}
+		}
+	}
+}
