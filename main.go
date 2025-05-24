@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"musiikkiProjektit/handlers"
+	"musiikkiProjektit/utils"
 	"musiikkiProjektit/views/index"
 	"net/http"
 	"time"
@@ -59,8 +60,8 @@ func initializeDBSchema(db *sql.DB) error{
 func initializeUsersSchema(db *sql.DB) error{
 	initQuery := `CREATE TABLE IF NOT EXISTS users(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		username text UNIQUE NOT NULL,
-		password text NOT NULL
+		username TEXT UNIQUE NOT NULL,
+		password TEXT NOT NULL
 	);`
 
 	_, err := db.Exec(initQuery)
@@ -73,9 +74,11 @@ func initializeUsersSchema(db *sql.DB) error{
 
 func initializeNotesSchema(db *sql.DB) error{
 	initQuery := `CREATE TABLE IF NOT EXISTS notes(
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		title text NOT NULL,
-		note text NOT NULL
+		note_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		user_id INTEGER,
+		title TEXT NOT NULL,
+		note TEXT NOT NULL,
+		FOREIGN KEY(user_id) REFERENCES users(id)
 	);`
 
 	_, err := db.Exec(initQuery)
@@ -106,6 +109,15 @@ func main(){
 	err = initializeDBSchema(db)
 	if err != nil {
 		log.Fatalf("Error creating the database schema: %s\n", err)
+	}
+
+	testUser := utils.Credentials{
+		Username: "test",
+		Password: "123",
+	}
+	err = handlers.CreateNewUser(db, testUser)
+	if err != nil {
+		log.Fatalln(err)
 	}
 
 	// Pages

@@ -12,6 +12,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const BCRYPT_COST = 12
+
 func HandleLoginPage(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
 	if err != nil{
@@ -22,7 +24,6 @@ func HandleLoginPage(w http.ResponseWriter, r *http.Request){
 	sessionData := Sessions[cookie.Value]
 	login.LoginPage(sessionData).Render(r.Context(), w)
 }
-
 
 func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	var inputtedCreds utils.Credentials
@@ -85,4 +86,18 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 		Expires: time.Now(),
 	})
 	http.Redirect(w,r,"/", 303)
+}
+
+func CreateNewUser(db *sql.DB, credentials utils.Credentials) error{
+	createNewUserQuery := `INSERT INTO users(username, password) VALUES(?,?);`
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), BCRYPT_COST)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec(createNewUserQuery, credentials.Username, passwordHash)
+	if err != nil {
+		return err
+	}
+	return nil
 }
