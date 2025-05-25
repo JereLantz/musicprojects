@@ -8,7 +8,7 @@ templ NotesPage(sessionData utils.Session){
     @layouts.Base(sessionData){
         <h2>Notes</h2>
         if sessionData.LoggedIn{
-            @components.NewNoteForm([]string{})
+            @components.NewNoteForm(utils.Note{},[]string{})
         }
 
         <div id="note-container">

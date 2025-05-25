@@ -77,7 +77,8 @@ func initializeNotesSchema(db *sql.DB) error{
 		note_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_id INTEGER,
 		title TEXT NOT NULL,
-		note TEXT NOT NULL,
+		note BLOB NOT NULL,
+		created TEXT NOT NULL,
 		FOREIGN KEY(user_id) REFERENCES users(id)
 	);`
 
@@ -111,14 +112,18 @@ func main(){
 		log.Fatalf("Error creating the database schema: %s\n", err)
 	}
 
+	// for testing ====
 	testUser := utils.Credentials{
 		Username: "test",
 		Password: "123",
 	}
 	err = handlers.CreateNewUser(db, testUser)
 	if err != nil {
-		log.Fatalln(err)
+		if err.Error() != "UNIQUE constraint failed: users.username"{
+			log.Fatalln(err)
+		}
 	}
+	//===
 
 	// Pages
 	//handler.HandleFunc("GET /", handleServeIndex)
@@ -136,6 +141,9 @@ func main(){
 		handlers.HandleLogin(db, w,r)
 	})
 	handler.HandleFunc("GET /logout", handlers.HandleLogout)
+	handler.HandleFunc("POST /api/notes/addnew", func(w http.ResponseWriter, r *http.Request) {
+		handlers.HandleCreateNewNote(db, w, r)
+	})
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./")))

@@ -50,7 +50,7 @@ func NotesPage(sessionData utils.Session) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if sessionData.LoggedIn {
-				templ_7745c5c3_Err = components.NewNoteForm([]string{}).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = components.NewNoteForm(utils.Note{}, []string{}).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

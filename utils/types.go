@@ -18,3 +18,9 @@ func (s Session) IsSessionExpired() bool{
 	return s.Expiry.Before(time.Now())
 }
 
+type Note struct {
+	Title string
+	Note string
+	//TODO: lisää timestamp?
+}
+
