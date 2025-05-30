@@ -30,7 +30,7 @@ func KeyQuizCheckResp(correct bool) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		if correct {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<p>Correct</p><button type=\"button\" hx-post=\"/keyquiz/newquiz\" hx-target=\"#quiz-area\">Next question</button>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<p>Correct</p><button type=\"button\" hx-get=\"/api/keyquiz/newquiz\" hx-target=\"#quiz-area\">Next question</button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

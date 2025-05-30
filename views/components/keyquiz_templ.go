@@ -29,7 +29,7 @@ func KeyQuiz(key string, orderedNotes []string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/keyquiz/checkanswer\" hx-target=\"#submit-answer-container\" hx-swap=\"innerHTML\"><p>Select the correct sharps/flats for the key \"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/api/keyquiz/checkanswer\" hx-target=\"#submit-answer-container\" hx-swap=\"innerHTML\"><p>Select the correct sharps/flats for the key \"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

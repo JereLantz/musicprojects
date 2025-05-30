@@ -126,7 +126,6 @@ func main(){
 	//===
 
 	// Pages
-	//handler.HandleFunc("GET /", handleServeIndex)
 	handler.HandleFunc("GET /", handlers.HandleSessionMiddleware(handleServeIndex))
 	handler.HandleFunc("GET /notes", handlers.HandleSessionMiddleware(handlers.HandleServeNotes))
 	handler.HandleFunc("GET /chordprogress", handlers.HandleSessionMiddleware(handlers.HandleServeChordProg))
@@ -134,10 +133,10 @@ func main(){
 	handler.HandleFunc("GET /login", handlers.HandleSessionMiddleware(handlers.HandleLoginPage))
 
 	// API
-	handler.HandleFunc("POST /keyquiz/start", handlers.HandleStartKeyQuiz)
-	handler.HandleFunc("POST /keyquiz/checkanswer", handlers.HandleCheckQuiz)
-	handler.HandleFunc("POST /keyquiz/newquiz", handlers.HandleStartKeyQuiz)
-	handler.HandleFunc("POST /login", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("GET /api/keyquiz/start", handlers.HandleStartKeyQuiz)
+	handler.HandleFunc("POST /api/keyquiz/checkanswer", handlers.HandleCheckQuiz)
+	handler.HandleFunc("GET /api/keyquiz/newquiz", handlers.HandleStartKeyQuiz)
+	handler.HandleFunc("POST /api/login", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HandleLogin(db, w,r)
 	})
 	handler.HandleFunc("GET /logout", handlers.HandleLogout)

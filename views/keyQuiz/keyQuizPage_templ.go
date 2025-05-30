@@ -44,7 +44,7 @@ func KeyQuizPage(sessionData utils.Session) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>Key quiz</h2><div id=\"quiz-area\"><p>This is a quiz about recognizing the accidentals of a given key</p><p>Click start to begin</p><button hx-post=\"/keyquiz/start\" hx-target=\"#quiz-area\">Start!</button></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>Key quiz</h2><div id=\"quiz-area\"><p>This is a quiz about recognizing the accidentals of a given key</p><p>Click start to begin</p><button hx-get=\"/api/keyquiz/start\" hx-target=\"#quiz-area\">Start!</button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

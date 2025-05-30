@@ -9,7 +9,7 @@ templ KeyQuizPage(sessionData utils.Session){
         <div id="quiz-area">
             <p>This is a quiz about recognizing the accidentals of a given key</p>
             <p>Click start to begin</p>
-            <button hx-post="/keyquiz/start" hx-target="#quiz-area">
+            <button hx-get="/api/keyquiz/start" hx-target="#quiz-area">
                 Start!
             </button>
         </div>

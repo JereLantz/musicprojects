@@ -3,7 +3,7 @@ package components
 templ KeyQuizCheckResp(correct bool){
     if correct {
         <p>Correct</p>
-        <button type="button" hx-post="/keyquiz/newquiz" hx-target="#quiz-area">
+        <button type="button" hx-get="/api/keyquiz/newquiz" hx-target="#quiz-area">
             Next question
         </button>
     } else{
