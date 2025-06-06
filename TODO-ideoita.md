@@ -6,3 +6,5 @@ kutsujen välistä aikaa, portti jota tämä palvelin kuuntelee.
 - Ota sessioiden luonnissa IP osoite talteen ja tarkista että se pysyy samana seuraavissa requesteissa. Resetoi kirjautuneiden käyttäjien sessio jos ip osoite vaihtuu.
 - Tapa tallentaa käyttäjien state.
    - Tallenna rekisteröityjen käyttäjien state tietokantaan.
+- Muuta handlers paketissa olevat tiedostot omiin loogisiin paketteihin ja siirrä utils paketista
+asiat niille loogisiin paketteihin?
