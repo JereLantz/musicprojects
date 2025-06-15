@@ -2,12 +2,15 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"musiikkiProjektit/handlers"
 	"musiikkiProjektit/utils"
 	"musiikkiProjektit/views/index"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -90,14 +93,41 @@ func initializeNotesSchema(db *sql.DB) error{
 	return nil
 }
 
+type config struct{
+	Port int `json:"port"`
+}
+
+var configs config
+
+func readConfigs() error{
+	file, err := os.Open("./config.json")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&configs)
+	if err != nil{
+		return err
+	}
+
+	return nil
+}
+
 func init(){
+	err := readConfigs()
+	if err != nil {
+		log.Fatalf("Failed to read the configuration file %s\n", err)
+	}
+
 	go handlers.CleanupOutdatedSessions(30 * time.Minute)
 }
 
 func main(){
 	handler := http.NewServeMux()
 	server := http.Server{
-		Addr: ":42069",
+		Addr: ":" + strconv.Itoa(configs.Port),
 		Handler: handler,
 	}
 
