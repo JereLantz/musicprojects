@@ -175,7 +175,7 @@ func main(){
 	})
 
 	// Files
-	handler.Handle("GET /index.js", http.FileServer(http.Dir("./")))
+	handler.Handle("GET /index.js", http.FileServer(http.Dir("./public/")))
 
 	log.Printf("server started on port %s\n", server.Addr)
 	log.Fatal(server.ListenAndServe())
