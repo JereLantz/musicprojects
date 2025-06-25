@@ -15,7 +15,7 @@ templ Base(sessionData utils.Session){
             <script src="/index.js"></script>
             <!--<link rel="stylesheet" href="/styles/index.css">-->
         </head>
-        <body hx-ext="response-targets">
+        <body hx-ext="response-targets" hx-boost="true">
             @components.Header(sessionData)
             <main id="main-content" class="main-content">
                 { children... }
