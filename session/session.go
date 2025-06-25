@@ -3,12 +3,15 @@ package session
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"io"
 	"log"
 	"musiikkiProjektit/utils"
 	"net/http"
 	"time"
 )
+
+var Sessions = map[string]Session{}
 
 const SESSION_TOKEN_NAME = "session_token"
 
@@ -18,17 +21,30 @@ type Session struct {
 	Expiry time.Time
 }
 
+func GetSession(id string) (Session, error){
+	//TODO:
+	var requestedSession Session
+
+	requestedSession, ok := Sessions[id]
+	if !ok {
+		return requestedSession, errors.New("No session found with id: " + id)
+	}
+	return requestedSession,nil
+}
+
+func DeleteSession(id string) error{
+	//TODO:
+	return errors.New("Not yet implemented")
+}
+
+func UpdateSession(updatedSession Session, id string) error{
+	//TODO: tätä tarvitaan ehkä vasta myöhemmin. Kun halutaan tallentaa käyttäjän tilasta enemmän tietoa
+	return errors.New("Not yet implemented")
+}
+
 func (s Session) isSessionExpired() bool{
 	return s.Expiry.Before(time.Now())
 }
-
-var Sessions = map[string]Session{}
-/*
-TODO:
-- Funktio jolla voidaan hakea sessio tokenin perusteella
-- Funktio joka poistaa session
-- Funktio joka päivittää session
-*/
 
 /*
 Creates new session in memory from the Credetials stuct. Can be Credentials struct with null values
