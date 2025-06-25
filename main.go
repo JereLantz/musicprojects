@@ -28,7 +28,13 @@ func handleServeIndex(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(500)
 		return
 	}
-	sessionData := session.Sessions[cookie.Value]
+	sessionData, err := session.GetSession(cookie.Value)
+	if err != nil {
+		//TODO: some better error handling here?
+		log.Printf("could not get session information when serving the index %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
 
 	w.WriteHeader(200)
 	index.Index(sessionData).Render(r.Context(), w)
