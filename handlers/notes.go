@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"log"
+	"musiikkiProjektit/session"
 	"musiikkiProjektit/utils"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/notes"
@@ -10,13 +11,13 @@ import (
 )
 
 func HandleServeNotes(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the notes page. %s\n", err)
 		w.WriteHeader(500)
 		return
 	}
-	sessionData := Sessions[cookie.Value]
+	sessionData := session.Sessions[cookie.Value]
 	notes.NotesPage(sessionData).Render(r.Context(), w)
 }
 
@@ -25,14 +26,14 @@ func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){
 }
 
 func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
 	if err != nil {
 		//TODO: joku parempi virheellinen session token vastaus
 		w.WriteHeader(401)
 		return
 	}
 
-	userSession := Sessions[cookie.Value]
+	userSession := session.Sessions[cookie.Value]
 	if !userSession.LoggedIn{
 		//TODO: käyttäjä ei ole kirjautunut sisään. Joku parempi virhe?
 		w.WriteHeader(401)

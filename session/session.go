@@ -1,4 +1,4 @@
-package handlers
+package session
 
 import (
 	"crypto/rand"
@@ -12,7 +12,23 @@ import (
 
 const SESSION_TOKEN_NAME = "session_token"
 
-var Sessions = map[string]utils.Session{}
+type Session struct {
+	LoggedIn bool
+	Username string
+	Expiry time.Time
+}
+
+func (s Session) isSessionExpired() bool{
+	return s.Expiry.Before(time.Now())
+}
+
+var Sessions = map[string]Session{}
+/*
+TODO:
+- Funktio jolla voidaan hakea sessio tokenin perusteella
+- Funktio joka poistaa session
+- Funktio joka päivittää session
+*/
 
 /*
 Creates new session in memory from the Credetials stuct. Can be Credentials struct with null values
@@ -27,7 +43,7 @@ func createSession(creds utils.Credentials) (string, error){
 
 	expiresAt := time.Now().Add(1 * time.Hour)
 
-	Sessions[sessionToken] = utils.Session{
+	Sessions[sessionToken] = Session{
 		LoggedIn: false,
 		Username: creds.Username,
 		Expiry: expiresAt,
@@ -67,7 +83,7 @@ func checkForValidSession(r *http.Request) (bool, error){
 		return false, nil
 	}
 
-	if reqSession.IsSessionExpired(){
+	if reqSession.isSessionExpired(){
 		delete(Sessions, sessionToken)
 		return false, nil
 	}
@@ -168,7 +184,7 @@ func CleanupOutdatedSessions(interval time.Duration){
 		var count int
 		log.Println("Cleaning outdated sessions...")
 		for token, session := range Sessions{
-			if session.IsSessionExpired(){
+			if session.isSessionExpired(){
 				delete(Sessions, token)
 				count ++
 			}

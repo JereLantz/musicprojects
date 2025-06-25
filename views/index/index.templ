@@ -1,9 +1,9 @@
 package index
 
 import "musiikkiProjektit/views/layouts"
-import "musiikkiProjektit/utils"
+import "musiikkiProjektit/session"
 
-templ Index(sessionData utils.Session){
+templ Index(sessionData session.Session){
     @layouts.Base(sessionData){
         <div>
             <h2>Welcome to my music projects page</h2>

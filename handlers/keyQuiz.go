@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"math/rand/v2"
+	"musiikkiProjektit/session"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/keyQuiz"
 	"net/http"
@@ -25,13 +26,13 @@ var correctAccidentalAmounts = map[string]int{"C":0,"G":1,"F":1,"D":2,"Bb":2,"A"
 
 
 func HandleServeKeyQuiz(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the key quiz page. %s\n", err)
 		w.WriteHeader(500)
 		return
 	}
-	sessionData := Sessions[cookie.Value]
+	sessionData := session.Sessions[cookie.Value]
 
 	keyquiz.KeyQuizPage(sessionData).Render(r.Context(), w)
 }

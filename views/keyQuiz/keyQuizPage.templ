@@ -1,9 +1,9 @@
 package keyquiz
 
 import "musiikkiProjektit/views/layouts"
-import "musiikkiProjektit/utils"
+import "musiikkiProjektit/session"
 
-templ KeyQuizPage(sessionData utils.Session){
+templ KeyQuizPage(sessionData session.Session){
     @layouts.Base(sessionData){
         <h2>Key quiz</h2>
         <div id="quiz-area">

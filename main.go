@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"musiikkiProjektit/handlers"
+	"musiikkiProjektit/session"
 	"musiikkiProjektit/utils"
 	"musiikkiProjektit/views/index"
 	"net/http"
@@ -21,13 +22,13 @@ func handleServeIndex(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(404)
 		return
 	}
-	cookie, err := r.Cookie(handlers.SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the home. %s\n", err)
 		w.WriteHeader(500)
 		return
 	}
-	sessionData := handlers.Sessions[cookie.Value]
+	sessionData := session.Sessions[cookie.Value]
 
 	w.WriteHeader(200)
 	index.Index(sessionData).Render(r.Context(), w)
@@ -121,7 +122,7 @@ func init(){
 		log.Fatalf("Failed to read the configuration file %s\n", err)
 	}
 
-	go handlers.CleanupOutdatedSessions(30 * time.Minute)
+	go session.CleanupOutdatedSessions(30 * time.Minute)
 }
 
 func main(){
@@ -156,11 +157,11 @@ func main(){
 	//===
 
 	// Pages
-	handler.HandleFunc("GET /", handlers.HandleSessionMiddleware(handleServeIndex))
-	handler.HandleFunc("GET /notes", handlers.HandleSessionMiddleware(handlers.HandleServeNotes))
-	handler.HandleFunc("GET /chordprogress", handlers.HandleSessionMiddleware(handlers.HandleServeChordProg))
-	handler.HandleFunc("GET /keyquiz", handlers.HandleSessionMiddleware(handlers.HandleServeKeyQuiz))
-	handler.HandleFunc("GET /login", handlers.HandleSessionMiddleware(handlers.HandleLoginPage))
+	handler.HandleFunc("GET /", session.HandleSessionMiddleware(handleServeIndex))
+	handler.HandleFunc("GET /notes", session.HandleSessionMiddleware(handlers.HandleServeNotes))
+	handler.HandleFunc("GET /chordprogress", session.HandleSessionMiddleware(handlers.HandleServeChordProg))
+	handler.HandleFunc("GET /keyquiz", session.HandleSessionMiddleware(handlers.HandleServeKeyQuiz))
+	handler.HandleFunc("GET /login", session.HandleSessionMiddleware(handlers.HandleLoginPage))
 
 	// API
 	handler.HandleFunc("GET /api/keyquiz/start", handlers.HandleStartKeyQuiz)

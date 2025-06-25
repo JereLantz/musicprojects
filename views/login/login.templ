@@ -3,8 +3,9 @@ package login
 import "musiikkiProjektit/views/layouts"
 import "musiikkiProjektit/views/components"
 import "musiikkiProjektit/utils"
+import "musiikkiProjektit/session"
 
-templ LoginPage(sessionData utils.Session){
+templ LoginPage(sessionData session.Session){
     @layouts.Base(sessionData){
         <h2>Log in</h2>
         <div id="login-container">

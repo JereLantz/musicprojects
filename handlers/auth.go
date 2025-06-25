@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"log"
+	"musiikkiProjektit/session"
 	"musiikkiProjektit/utils"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/login"
@@ -15,13 +16,13 @@ import (
 const BCRYPT_COST = 12
 
 func HandleLoginPage(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the login page. %s\n", err)
 		w.WriteHeader(500)
 		return
 	}
-	sessionData := Sessions[cookie.Value]
+	sessionData := session.Sessions[cookie.Value]
 	login.LoginPage(sessionData).Render(r.Context(), w)
 }
 
@@ -40,7 +41,7 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 
 	if err == nil {
 		log.Printf("Successfull login %s\n", inputtedCreds.Username)
-		err = SessionLogin(r, inputtedCreds)
+		err = session.SessionLogin(r, inputtedCreds)
 		if err != nil {
 			w.WriteHeader(500)
 			log.Printf("error modifying the session with login details: %s\n", err)
@@ -71,17 +72,17 @@ func checkUserCredentials(db *sql.DB, credentials utils.Credentials) error{
 }
 
 func HandleLogout(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
 	if err != nil {
 		w.WriteHeader(500)
 		log.Printf("Failed get the session cookie to logout %s\n", err)
 		return
 	}
 
-	delete(Sessions, cookie.Value)
+	delete(session.Sessions, cookie.Value)
 	
 	http.SetCookie(w, &http.Cookie{
-		Name: SESSION_TOKEN_NAME,
+		Name: session.SESSION_TOKEN_NAME,
 		Value: "",
 		Expires: time.Now(),
 	})

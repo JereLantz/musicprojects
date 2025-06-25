@@ -1,8 +1,8 @@
 package components
 
-import "musiikkiProjektit/utils"
+import "musiikkiProjektit/session"
 
-templ Header(sessionData utils.Session){
+templ Header(sessionData session.Session){
     <div>
         if sessionData.LoggedIn{
             <a href="/logout">Log out</a>
