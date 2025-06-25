@@ -32,8 +32,8 @@ func GetSession(id string) (Session, error){
 }
 
 func DeleteSession(id string) error{
-	//TODO:
-	return errors.New("Not yet implemented")
+	delete(sessions, id)
+	return nil
 }
 
 func UpdateSession(updatedSession Session, id string) error{
