@@ -15,6 +15,12 @@ func HandleServeChordProg(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(500)
 		return
 	}
-	sessionData := session.Sessions[cookie.Value]
+	sessionData, err := session.GetSession(cookie.Value)
+	if err != nil {
+		//TODO: session doesn't exist.
+		log.Printf("Error fetchin session when displaying chord prog page %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
 	chordprogress.ChordProgPage(sessionData).Render(r.Context(), w)
 }

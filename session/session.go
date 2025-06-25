@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var Sessions = map[string]Session{}
+var sessions = map[string]Session{}
 
 const SESSION_TOKEN_NAME = "session_token"
 
@@ -22,10 +22,9 @@ type Session struct {
 }
 
 func GetSession(id string) (Session, error){
-	//TODO:
 	var requestedSession Session
 
-	requestedSession, ok := Sessions[id]
+	requestedSession, ok := sessions[id]
 	if !ok {
 		return requestedSession, errors.New("No session found with id: " + id)
 	}
@@ -59,7 +58,7 @@ func createSession(creds utils.Credentials) (string, error){
 
 	expiresAt := time.Now().Add(1 * time.Hour)
 
-	Sessions[sessionToken] = Session{
+	sessions[sessionToken] = Session{
 		LoggedIn: false,
 		Username: creds.Username,
 		Expiry: expiresAt,
@@ -94,13 +93,13 @@ func checkForValidSession(r *http.Request) (bool, error){
 	}
 	sessionToken := cookie.Value
 
-	reqSession, exists := Sessions[sessionToken]
+	reqSession, exists := sessions[sessionToken]
 	if !exists{
 		return false, nil
 	}
 
 	if reqSession.isSessionExpired(){
-		delete(Sessions, sessionToken)
+		delete(sessions, sessionToken)
 		return false, nil
 	}
 
@@ -115,11 +114,11 @@ func refreshSession(w http.ResponseWriter, r *http.Request) error{
 	token := cookie.Value
 
 	newExpiry := time.Now().Add(1 * time.Hour)
-	oldSessionData := Sessions[token]
-	delete(Sessions, token)
+	oldSessionData := sessions[token]
+	delete(sessions, token)
 
 	oldSessionData.Expiry = newExpiry
-	Sessions[token] = oldSessionData
+	sessions[token] = oldSessionData
 
 	http.SetCookie(w, &http.Cookie{
 		Name: SESSION_TOKEN_NAME,
@@ -157,13 +156,13 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 			http.SetCookie(w, &http.Cookie{
 				Name: SESSION_TOKEN_NAME,
 				Value: newToken,
-				Expires: Sessions[newToken].Expiry,
+				Expires: sessions[newToken].Expiry,
 				SameSite: http.SameSiteStrictMode,
 			})
 			r.AddCookie(&http.Cookie{
 				Name: SESSION_TOKEN_NAME,
 				Value: newToken,
-				Expires: Sessions[newToken].Expiry,
+				Expires: sessions[newToken].Expiry,
 				SameSite: http.SameSiteStrictMode,
 			})
 		}
@@ -182,13 +181,13 @@ func SessionLogin(r *http.Request, creds utils.Credentials) error{
 		return err
 	}
 	token := cookie.Value
-	sessionDetails := Sessions[token]
-	delete(Sessions, token)
+	sessionDetails := sessions[token]
+	delete(sessions, token)
 
 	sessionDetails.LoggedIn = true
 	sessionDetails.Username = creds.Username
 
-	Sessions[token] = sessionDetails
+	sessions[token] = sessionDetails
 	return nil
 }
 
@@ -199,9 +198,9 @@ func CleanupOutdatedSessions(interval time.Duration){
 	for range ticker.C{
 		var count int
 		log.Println("Cleaning outdated sessions...")
-		for token, session := range Sessions{
+		for token, session := range sessions{
 			if session.isSessionExpired(){
-				delete(Sessions, token)
+				delete(sessions, token)
 				count ++
 			}
 		}

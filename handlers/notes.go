@@ -17,7 +17,13 @@ func HandleServeNotes(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(500)
 		return
 	}
-	sessionData := session.Sessions[cookie.Value]
+	sessionData, err := session.GetSession(cookie.Value)
+	if err != nil {
+		//TODO: session doesn't exist.
+		log.Printf("Error fetchin session when displaying notes page %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
 	notes.NotesPage(sessionData).Render(r.Context(), w)
 }
 
@@ -33,7 +39,14 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	userSession := session.Sessions[cookie.Value]
+	userSession, err := session.GetSession(cookie.Value)
+	if err != nil {
+		//TODO: session doesn't exist.
+		log.Printf("Error fetchin session creating new note %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
+
 	if !userSession.LoggedIn{
 		//TODO: käyttäjä ei ole kirjautunut sisään. Joku parempi virhe?
 		w.WriteHeader(401)
