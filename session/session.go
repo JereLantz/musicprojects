@@ -13,7 +13,7 @@ import (
 
 var sessions = map[string]Session{}
 
-const SESSION_TOKEN_NAME = "session_token"
+const SessionTokenName = "session_token"
 
 type Session struct {
 	LoggedIn bool
@@ -84,7 +84,7 @@ func generateSessionId(len int) (string, error){
 Check whether the request contains a valid session.
 */
 func checkForValidSession(r *http.Request) (bool, error){
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(SessionTokenName)
 	if err != nil {
 		if err == http.ErrNoCookie{
 			return false, nil
@@ -107,7 +107,7 @@ func checkForValidSession(r *http.Request) (bool, error){
 }
 
 func refreshSession(w http.ResponseWriter, r *http.Request) error{
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(SessionTokenName)
 	if err != nil{
 		return err
 	}
@@ -121,7 +121,7 @@ func refreshSession(w http.ResponseWriter, r *http.Request) error{
 	sessions[token] = oldSessionData
 
 	http.SetCookie(w, &http.Cookie{
-		Name: SESSION_TOKEN_NAME,
+		Name: SessionTokenName,
 		Value: token,
 		Expires: newExpiry,
 		SameSite: http.SameSiteStrictMode,
@@ -154,13 +154,13 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 			}
 
 			http.SetCookie(w, &http.Cookie{
-				Name: SESSION_TOKEN_NAME,
+				Name: SessionTokenName,
 				Value: newToken,
 				Expires: sessions[newToken].Expiry,
 				SameSite: http.SameSiteStrictMode,
 			})
 			r.AddCookie(&http.Cookie{
-				Name: SESSION_TOKEN_NAME,
+				Name: SessionTokenName,
 				Value: newToken,
 				Expires: sessions[newToken].Expiry,
 				SameSite: http.SameSiteStrictMode,
@@ -175,7 +175,7 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 Modifies the session in memory to have the user logged id.
 */
 func SessionLogin(r *http.Request, creds utils.Credentials) error{
-	cookie, err := r.Cookie(SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(SessionTokenName)
 	if err != nil {
 		log.Printf("Failed to fetch the request cookie for logging in and modifying the session %s\n", err)
 		return err

@@ -22,7 +22,7 @@ func handleServeIndex(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(404)
 		return
 	}
-	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the home. %s\n", err)
 		w.WriteHeader(500)

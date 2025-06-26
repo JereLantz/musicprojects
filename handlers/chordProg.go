@@ -9,7 +9,7 @@ import (
 
 
 func HandleServeChordProg(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the chord prog page. %s\n", err)
 		w.WriteHeader(500)

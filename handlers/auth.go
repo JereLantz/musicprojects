@@ -13,10 +13,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const BCRYPT_COST = 12
+const bcryptCost = 12
 
 func HandleLoginPage(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the login page. %s\n", err)
 		w.WriteHeader(500)
@@ -78,7 +78,7 @@ func checkUserCredentials(db *sql.DB, credentials utils.Credentials) error{
 }
 
 func HandleLogout(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil {
 		w.WriteHeader(500)
 		log.Printf("Failed get the session cookie to logout %s\n", err)
@@ -88,7 +88,7 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 	session.DeleteSession(cookie.Value)
 	
 	http.SetCookie(w, &http.Cookie{
-		Name: session.SESSION_TOKEN_NAME,
+		Name: session.SessionTokenName,
 		Value: "",
 		Expires: time.Now(),
 	})
@@ -97,7 +97,7 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 
 func CreateNewUser(db *sql.DB, credentials utils.Credentials) error{
 	createNewUserQuery := `INSERT INTO users(username, password) VALUES(?,?);`
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), BCRYPT_COST)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcryptCost)
 	if err != nil {
 		return err
 	}

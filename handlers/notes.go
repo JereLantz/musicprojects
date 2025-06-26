@@ -11,7 +11,7 @@ import (
 )
 
 func HandleServeNotes(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
 		log.Printf("Failed to fetch the session for displaying the notes page. %s\n", err)
 		w.WriteHeader(500)
@@ -32,7 +32,7 @@ func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){
 }
 
 func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(session.SESSION_TOKEN_NAME)
+	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil {
 		//TODO: joku parempi virheellinen session token vastaus
 		w.WriteHeader(401)
