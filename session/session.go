@@ -26,7 +26,7 @@ func GetSession(id string) (Session, error){
 
 	requestedSession, ok := sessions[id]
 	if !ok {
-		return requestedSession, errors.New("No session found with id: " + id)
+		return requestedSession, errors.New("No session found with requested id")
 	}
 	return requestedSession,nil
 }
