@@ -31,6 +31,10 @@ func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	//TODO:
 }
 
+func HandleNewNoteForm(w http.ResponseWriter, r *http.Request){
+	components.NewNoteForm(utils.Note{}, []string{}).Render(r.Context(), w)
+}
+
 func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil {

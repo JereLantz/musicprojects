@@ -1,27 +1,25 @@
 package notes
 
 import "musiikkiProjektit/views/layouts"
-import "musiikkiProjektit/utils"
-import "musiikkiProjektit/views/components"
 import "musiikkiProjektit/session"
 
 templ NotesPage(sessionData session.Session){
     @layouts.Base(sessionData){
         <h2>Notes</h2>
         if sessionData.LoggedIn{
-            @components.NewNoteForm(utils.Note{},[]string{})
-        }
+            <button hx-get="/notes/new" hx-swap="outerHTML">
+                Add new note
+            </button>
 
-        <div id="note-container">
-        if sessionData.LoggedIn {
-            <p hx-trigger="load" hx-post="/notes/api/getsavednotes" hx-swap="#note-container">
-                Fetching saved notes...
-            </p>
+            <div id="note-container">
+                <p hx-trigger="load" hx-get="/api/notes" hx-target="#note-container">
+                    Fetching saved notes...
+                </p>
+            </div>
         }else{
             <p>
-                Log in to see your saved notes and to make new notes.
+                You need to be logged in to see and to save notes
             </p>
         }
-        </div>
     }
 }

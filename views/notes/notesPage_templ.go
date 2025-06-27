@@ -9,8 +9,6 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "musiikkiProjektit/views/layouts"
-import "musiikkiProjektit/utils"
-import "musiikkiProjektit/views/components"
 import "musiikkiProjektit/session"
 
 func NotesPage(sessionData session.Session) templ.Component {
@@ -51,29 +49,15 @@ func NotesPage(sessionData session.Session) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if sessionData.LoggedIn {
-				templ_7745c5c3_Err = components.NewNoteForm(utils.Note{}, []string{}).Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " <div id=\"note-container\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			if sessionData.LoggedIn {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<p hx-trigger=\"load\" hx-post=\"/notes/api/getsavednotes\" hx-swap=\"#note-container\">Fetching saved notes...</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<button hx-get=\"/notes/new\" hx-swap=\"outerHTML\">Add new note</button><div id=\"note-container\"><p hx-trigger=\"load\" hx-get=\"/api/notes\" hx-target=\"#note-container\">Fetching saved notes...</p></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<p>Log in to see your saved notes and to make new notes.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<p>You need to be logged in to see and to save notes</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
 			}
 			return nil
 		})

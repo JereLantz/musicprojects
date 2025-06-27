@@ -177,9 +177,10 @@ func main(){
 		handlers.HandleLogin(db, w,r)
 	})
 	handler.HandleFunc("GET /logout", handlers.HandleLogout)
-	handler.HandleFunc("POST /api/notes/addnew", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("POST /api/notes", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HandleCreateNewNote(db, w, r)
 	})
+	handler.HandleFunc("GET /notes/new", handlers.HandleNewNoteForm)
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./public/")))
