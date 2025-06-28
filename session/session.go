@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"musiikkiProjektit/utils"
@@ -50,7 +51,7 @@ Creates new session in memory from the Credetials stuct. Can be Credentials stru
 if the user is not signed in.
 Returns the generated session id
 */
-func createSession(creds utils.Credentials) (string, error){
+func createSession() (string, error){
 	sessionToken, err := generateSessionId(64)
 	if err != nil {
 		return "", err
@@ -60,7 +61,6 @@ func createSession(creds utils.Credentials) (string, error){
 
 	sessions[sessionToken] = Session{
 		LoggedIn: false,
-		Username: creds.Username,
 		Expiry: expiresAt,
 	}
 
@@ -114,10 +114,13 @@ func refreshSession(w http.ResponseWriter, r *http.Request) error{
 	token := cookie.Value
 
 	newExpiry := time.Now().Add(1 * time.Hour)
-	oldSessionData := sessions[token]
-	delete(sessions, token)
+	oldSessionData, err := GetSession(token)
+	if err != nil {
+		return fmt.Errorf("Failed to fetch session to refresh it. %s", err)
+	}
 
 	oldSessionData.Expiry = newExpiry
+	//TODO: käytä update session api
 	sessions[token] = oldSessionData
 
 	http.SetCookie(w, &http.Cookie{
@@ -146,7 +149,7 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 				return
 			}
 		} else{
-			newToken, err := createSession(utils.Credentials{})
+			newToken, err := createSession()
 			if err != nil {
 				w.WriteHeader(500)
 				log.Printf("Failed to create session: %s\n", err)
@@ -154,12 +157,6 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 			}
 
 			http.SetCookie(w, &http.Cookie{
-				Name: SessionTokenName,
-				Value: newToken,
-				Expires: sessions[newToken].Expiry,
-				SameSite: http.SameSiteStrictMode,
-			})
-			r.AddCookie(&http.Cookie{
 				Name: SessionTokenName,
 				Value: newToken,
 				Expires: sessions[newToken].Expiry,

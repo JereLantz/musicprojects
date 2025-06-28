@@ -24,9 +24,7 @@ func HandleLoginPage(w http.ResponseWriter, r *http.Request){
 	}
 	sessionData, err := session.GetSession(cookie.Value)
 	if err != nil {
-		//TODO: session doesn't exist.
-		log.Printf("Error fetchin session for loggin in %s\n", err)
-		w.WriteHeader(500)
+		login.LoginPage(session.Session{}).Render(r.Context(), w)
 		return
 	}
 	login.LoginPage(sessionData).Render(r.Context(), w)

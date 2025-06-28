@@ -35,9 +35,7 @@ func HandleServeKeyQuiz(w http.ResponseWriter, r *http.Request){
 
 	sessionData, err := session.GetSession(cookie.Value)
 	if err != nil {
-		//TODO: session doesn't exist.
-		log.Printf("Error fetchin session when displaying keyquiz page %s\n", err)
-		w.WriteHeader(500)
+		keyquiz.KeyQuizPage(session.Session{}).Render(r.Context(), w)
 		return
 	}
 

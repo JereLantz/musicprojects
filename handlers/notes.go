@@ -19,9 +19,7 @@ func HandleServeNotes(w http.ResponseWriter, r *http.Request){
 	}
 	sessionData, err := session.GetSession(cookie.Value)
 	if err != nil {
-		//TODO: session doesn't exist.
-		log.Printf("Error fetchin session when displaying notes page %s\n", err)
-		w.WriteHeader(500)
+		notes.NotesPage(session.Session{}).Render(r.Context(), w)
 		return
 	}
 	notes.NotesPage(sessionData).Render(r.Context(), w)
