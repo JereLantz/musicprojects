@@ -33,6 +33,11 @@ func GetSession(id string) (Session, error){
 }
 
 func DeleteSession(id string) error{
+	_, err := GetSession(id)
+	if err != nil {
+		return err
+	}
+
 	delete(sessions, id)
 	return nil
 }
@@ -42,6 +47,8 @@ func UpdateSession(updatedSession Session, id string) error{
 	if !exists{
 		return errors.New("No session found with given id")
 	}
+
+	DeleteSession(id)
 
 	sessions[id] = updatedSession
 	return nil
@@ -98,13 +105,13 @@ func checkForValidSession(r *http.Request) (bool, error){
 	}
 	sessionToken := cookie.Value
 
-	reqSession, exists := sessions[sessionToken]
-	if !exists{
+	reqSession, err := GetSession(sessionToken)
+	if err != nil {
 		return false, nil
 	}
 
 	if reqSession.isSessionExpired(){
-		delete(sessions, sessionToken)
+		DeleteSession(sessionToken)
 		return false, nil
 	}
 
@@ -183,13 +190,15 @@ func SessionLogin(r *http.Request, creds utils.Credentials) error{
 		return err
 	}
 	token := cookie.Value
-	sessionDetails := sessions[token]
-	delete(sessions, token)
+	existingData, err := GetSession(token)
+	if err != nil {
+		return err
+	}
 
-	sessionDetails.LoggedIn = true
-	sessionDetails.Username = creds.Username
+	existingData.LoggedIn = true
+	existingData.Username = creds.Username
 
-	sessions[token] = sessionDetails
+	UpdateSession(existingData, token)
 	return nil
 }
 
