@@ -63,6 +63,12 @@ func initializeDBSchema(db *sql.DB) error{
 	if err != nil {
 		return fmt.Errorf("%s, while creating the notes schema", err)
 	}
+
+	err = initializeSessionStorage(db)
+	if err != nil {
+		return fmt.Errorf("%s, while creating the session storage", err)
+	}
+
 	return nil
 }
 
@@ -92,6 +98,22 @@ func initializeNotesSchema(db *sql.DB) error{
 	);`
 
 	_, err := db.Exec(initQuery)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func initializeSessionStorage(db *sql.DB) error {
+	query := `CREATE TABLE IF NOT EXISTS sessions(
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		session_id TEXT UNIQUE NOT NULL,
+		user_id INTEGER,
+		FOREIGN KEY(user_id) REFERENCES users(id)
+	);`
+
+	_, err := db.Exec(query)
 	if err != nil {
 		return err
 	}
