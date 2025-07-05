@@ -18,15 +18,17 @@ const bcryptCost = 12
 func HandleLoginPage(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
-		log.Printf("Failed to fetch the session for displaying the login page. %s\n", err)
-		w.WriteHeader(500)
+		w.WriteHeader(200)
+		login.LoginPage(session.Session{}).Render(r.Context(), w)
 		return
 	}
 	sessionData, err := session.GetSession(cookie.Value)
 	if err != nil {
+		w.WriteHeader(200)
 		login.LoginPage(session.Session{}).Render(r.Context(), w)
 		return
 	}
+	w.WriteHeader(200)
 	login.LoginPage(sessionData).Render(r.Context(), w)
 }
 
