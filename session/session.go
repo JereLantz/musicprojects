@@ -38,8 +38,13 @@ func DeleteSession(id string) error{
 }
 
 func UpdateSession(updatedSession Session, id string) error{
-	//TODO: tätä tarvitaan ehkä vasta myöhemmin. Kun halutaan tallentaa käyttäjän tilasta enemmän tietoa
-	return errors.New("Not yet implemented")
+	_, exists := sessions[id]
+	if !exists{
+		return errors.New("No session found with given id")
+	}
+
+	sessions[id] = updatedSession
+	return nil
 }
 
 func (s Session) isSessionExpired() bool{
