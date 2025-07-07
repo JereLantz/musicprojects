@@ -29,6 +29,57 @@ func HandleServeNotes(w http.ResponseWriter, r *http.Request){
 
 func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	//TODO:
+	// - vie array muistiinpanoja templateen. Jos arrayn pituus on 0
+	// 		kerro että ei tallennettuja muistiinpanoja.
+	cookie, err := r.Cookie(session.SessionTokenName)
+	if err != nil {
+		w.WriteHeader(401)
+		return
+	}
+
+	token := cookie.Value
+	sessionData, err := session.GetSession(token)
+	if err != nil {
+		w.WriteHeader(401)
+		return
+	}
+
+	if !sessionData.LoggedIn{
+		w.WriteHeader(401)
+		return
+	}
+
+	// TODO: pitäiskö tässä tarkistaa myös onko session outdated?
+	userNotes, err := getUsersNotes(db, sessionData.Username)
+	if err != nil {
+		log.Printf("error fetching users notes from db: %s\n", err)
+		w.WriteHeader(500)
+		return
+	}
+	components.NoteDisplay(userNotes).Render(r.Context(), w)
+}
+
+func getUsersNotes(db *sql.DB, username string) ([]utils.Note, error){
+	var userNotes []utils.Note
+	//TODO: hae myös time stamp?
+	query := `SELECT title, note FROM NOTES WHERE user_id = (SELECT id FROM users WHERE username = ?);`
+
+	row, err := db.Query(query, username)
+	if err != nil {
+		return []utils.Note{}, err
+	}
+	defer row.Close()
+
+	for row.Next(){
+		var note utils.Note
+		err = row.Scan(&note.Title, &note.Note)
+		if err != nil {
+			return []utils.Note{}, err
+		}
+		userNotes = append(userNotes, note)
+	}
+
+	return userNotes, nil
 }
 
 func HandleNewNoteForm(w http.ResponseWriter, r *http.Request){

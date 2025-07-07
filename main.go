@@ -211,6 +211,9 @@ func main(){
 		handlers.HandleCreateNewNote(db, w, r)
 	})
 	handler.HandleFunc("GET /notes/form", handlers.HandleNewNoteForm)
+	handler.HandleFunc("GET /api/notes", func(w http.ResponseWriter, r *http.Request) { 
+		handlers.HandleGetSavedNotes(db, w, r)
+	})
 
 
 	// Files

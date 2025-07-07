@@ -1,0 +1,23 @@
+package components
+
+import "musiikkiProjektit/utils"
+import "strconv"
+
+templ NoteDisplay(notes []utils.Note){
+    if len(notes) == 0 {
+        <p>No notes found</p>
+    } else {
+        for i, note := range notes {
+            <div id={"note_containder_" + strconv.Itoa(i)}>
+                <div id={"note" + strconv.Itoa(i)}>
+                    <h3>{note.Title}</h3>
+                    <p>{note.Note}</p>
+                </div>
+                <div>
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+        }
+    }
+}
