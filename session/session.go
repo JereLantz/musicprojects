@@ -215,6 +215,6 @@ func CleanupOutdatedSessions(interval time.Duration){
 				count ++
 			}
 		}
-		log.Printf("Cleaned %d outdated sessions", count)
+		log.Printf("Cleaning finished. Cleaned %d outdated sessions.", count)
 	}
 }
