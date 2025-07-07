@@ -190,21 +190,32 @@ func main(){
 	handler.HandleFunc("GET /keyquiz", session.HandleSessionMiddleware(handlers.HandleServeKeyQuiz))
 	handler.HandleFunc("GET /login", session.HandleSessionMiddleware(handlers.HandleLoginPage))
 
-	// API
+
+
+	/*___API___*/
+	// keyquiz
 	handler.HandleFunc("GET /api/keyquiz/start", handlers.HandleStartKeyQuiz)
 	handler.HandleFunc("POST /api/keyquiz/checkanswer", handlers.HandleCheckQuiz)
 	handler.HandleFunc("GET /api/keyquiz/newquiz", handlers.HandleStartKeyQuiz)
+
+
+	// Session
 	handler.HandleFunc("POST /api/login", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HandleLogin(db, w,r)
 	})
 	handler.HandleFunc("GET /logout", handlers.HandleLogout)
+
+
+	// Notes
 	handler.HandleFunc("POST /api/notes", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HandleCreateNewNote(db, w, r)
 	})
-	handler.HandleFunc("GET /notes/new", handlers.HandleNewNoteForm)
+	handler.HandleFunc("GET /notes/form", handlers.HandleNewNoteForm)
+
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./public/")))
+
 
 	log.Printf("server started on port %s\n", server.Addr)
 	log.Fatal(server.ListenAndServe())

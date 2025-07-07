@@ -4,7 +4,7 @@ import "musiikkiProjektit/utils"
 
 templ NewNoteForm(oldData utils.Note,errors []string){
     <div id="new-note-container">
-        <form hx-post="/api/notes/addnew" hx-target="#new-note-container" hx-swap="outerHTML">
+        <form hx-post="/api/notes" hx-target="#new-note-container" hx-swap="outerHTML">
             if len(errors) > 0{
                 <input required name="newNoteTitle" type="text" placeholder="Title" value={oldData.Title}>
                 <br/>

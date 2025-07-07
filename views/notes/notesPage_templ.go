@@ -49,7 +49,7 @@ func NotesPage(sessionData session.Session) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if sessionData.LoggedIn {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<button hx-get=\"/notes/new\" hx-swap=\"outerHTML\">Add new note</button><div id=\"note-container\"><p hx-trigger=\"load\" hx-get=\"/api/notes\" hx-target=\"#note-container\">Fetching saved notes...</p></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<button hx-get=\"/notes/form\" hx-swap=\"outerHTML\">Add new note</button><div id=\"note-container\"><p hx-trigger=\"load\" hx-get=\"/api/notes\" hx-target=\"#note-container\">Fetching saved notes...</p></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

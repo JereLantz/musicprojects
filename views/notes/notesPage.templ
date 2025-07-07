@@ -7,7 +7,7 @@ templ NotesPage(sessionData session.Session){
     @layouts.Base(sessionData){
         <h2>Notes</h2>
         if sessionData.LoggedIn{
-            <button hx-get="/notes/new" hx-swap="outerHTML">
+            <button hx-get="/notes/form" hx-swap="outerHTML">
                 Add new note
             </button>
 
