@@ -7,9 +7,9 @@ templ NoteDisplay(notes []utils.Note){
     if len(notes) == 0 {
         <p>No notes found</p>
     } else {
-        for i, note := range notes {
-            <div id={"note_containder_" + strconv.Itoa(i)}>
-                <div id={"note" + strconv.Itoa(i)}>
+        for _, note := range notes {
+            <div id={"note_containder_" + strconv.Itoa(note.Id)}>
+                <div id={"note" + strconv.Itoa(note.Id)}>
                     <h3>{note.Title}</h3>
                     <p>{note.Note}</p>
                 </div>

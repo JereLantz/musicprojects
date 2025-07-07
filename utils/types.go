@@ -6,6 +6,7 @@ type Credentials struct{
 }
 
 type Note struct {
+	Id int
 	Title string
 	Note string
 	//TODO: lisää timestamp?

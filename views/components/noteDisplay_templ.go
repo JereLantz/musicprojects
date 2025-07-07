@@ -38,15 +38,15 @@ func NoteDisplay(notes []utils.Note) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			for i, note := range notes {
+			for _, note := range notes {
 				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div id=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var2 string
-				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("note_containder_" + strconv.Itoa(i))
+				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("note_containder_" + strconv.Itoa(note.Id))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/noteDisplay.templ`, Line: 11, Col: 57}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/noteDisplay.templ`, Line: 11, Col: 63}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {
@@ -57,9 +57,9 @@ func NoteDisplay(notes []utils.Note) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
-				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("note" + strconv.Itoa(i))
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("note" + strconv.Itoa(note.Id))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/noteDisplay.templ`, Line: 12, Col: 49}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/noteDisplay.templ`, Line: 12, Col: 55}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
