@@ -160,10 +160,10 @@ func main(){
 	}
 
 	db, err := dbConnect()
-	defer db.Close()
 	if err != nil {
 		log.Fatalf("Error establishing the database connectin: %s\n", err)
 	}
+	defer db.Close()
 
 	err = initializeDBSchema(db)
 	if err != nil {
