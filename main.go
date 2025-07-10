@@ -7,7 +7,6 @@ import (
 	"log"
 	"musiikkiProjektit/handlers"
 	"musiikkiProjektit/session"
-	"musiikkiProjektit/utils"
 	"musiikkiProjektit/views/index"
 	"net/http"
 	"os"
@@ -171,11 +170,9 @@ func main(){
 	}
 
 	// for testing ====
-	testUser := utils.Credentials{
-		Username: "test",
-		Password: "123",
-	}
-	err = handlers.CreateNewUser(db, testUser)
+	testUserName := "test"
+	testUserPassword := "123"
+	err = handlers.CreateNewUser(db, testUserName, testUserPassword )
 	if err != nil {
 		if err.Error() != "UNIQUE constraint failed: users.username"{
 			log.Fatalln(err)

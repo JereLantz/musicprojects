@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"musiikkiProjektit/session"
-	"musiikkiProjektit/utils"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/login"
 	"net/http"
@@ -33,7 +32,6 @@ func HandleLoginPage(w http.ResponseWriter, r *http.Request){
 }
 
 func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
-	var inputtedCreds utils.Credentials
 	err := r.ParseForm()
 	if err != nil {
 		w.WriteHeader(500)
@@ -41,13 +39,13 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	inputtedCreds.Username = r.FormValue("login-uname")
-	inputtedCreds.Password = r.FormValue("login-passwd")
-	err = checkUserCredentials(db, inputtedCreds)
+	inputtedUsername := r.FormValue("login-uname")
+	inputtedPassword := r.FormValue("login-passwd")
+	err = checkUserCredentials(db, inputtedUsername, inputtedPassword)
 
 	if err == nil {
-		log.Printf("Successfull login %s\n", inputtedCreds.Username)
-		err = session.SessionLogin(r, inputtedCreds)
+		log.Printf("Successfull login %s\n", inputtedUsername)
+		err = session.SessionLogin(r, inputtedUsername)
 		if err != nil {
 			w.WriteHeader(500)
 			log.Printf("error modifying the session with login details: %s\n", err)
@@ -58,21 +56,21 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	}
 
 	log.Printf("Failed login, %s\n", err)
-	components.LoginForm(true, inputtedCreds).Render(r.Context(), w)
+	components.LoginForm(true, inputtedUsername, inputtedPassword).Render(r.Context(), w)
 }
 
-func checkUserCredentials(db *sql.DB, credentials utils.Credentials) error{
+func checkUserCredentials(db *sql.DB, uname, passwd string) error{
 	fetchPasswdQuery := `SELECT password FROM users WHERE username = ?;`
 	var storedPasswd []byte
 
-	passRow := db.QueryRow(fetchPasswdQuery, credentials.Username)
+	passRow := db.QueryRow(fetchPasswdQuery, uname)
 
 	err := passRow.Scan(&storedPasswd)
 	if err != nil {
 		return err
 	}
 
-	err = bcrypt.CompareHashAndPassword(storedPasswd, []byte(credentials.Password))
+	err = bcrypt.CompareHashAndPassword(storedPasswd, []byte(passwd))
 
 	return err
 }
@@ -95,14 +93,14 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 	http.Redirect(w,r,"/", 303)
 }
 
-func CreateNewUser(db *sql.DB, credentials utils.Credentials) error{
+func CreateNewUser(db *sql.DB, username, password string) error{
 	createNewUserQuery := `INSERT INTO users(username, password) VALUES(?,?);`
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcryptCost)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcryptCost)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec(createNewUserQuery, credentials.Username, passwordHash)
+	_, err = db.Exec(createNewUserQuery, username, passwordHash)
 	if err != nil {
 		return err
 	}

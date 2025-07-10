@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"musiikkiProjektit/utils"
 	"net/http"
 	"time"
 )
@@ -183,7 +182,7 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 /*
 Modifies the session in memory to have the user logged id.
 */
-func SessionLogin(r *http.Request, creds utils.Credentials) error{
+func SessionLogin(r *http.Request, userName string) error{
 	cookie, err := r.Cookie(SessionTokenName)
 	if err != nil {
 		log.Printf("Failed to fetch the request cookie for logging in and modifying the session %s\n", err)
@@ -196,7 +195,7 @@ func SessionLogin(r *http.Request, creds utils.Credentials) error{
 	}
 
 	existingData.LoggedIn = true
-	existingData.Username = creds.Username
+	existingData.Username = userName
 
 	UpdateSession(existingData, token)
 	return nil

@@ -2,7 +2,6 @@ package login
 
 import "musiikkiProjektit/views/layouts"
 import "musiikkiProjektit/views/components"
-import "musiikkiProjektit/utils"
 import "musiikkiProjektit/session"
 
 templ LoginPage(sessionData session.Session){
@@ -14,7 +13,7 @@ templ LoginPage(sessionData session.Session){
                     Already logged in as "{sessionData.Username}".
                 </h3>
             }else{
-                @components.LoginForm(false, utils.Credentials{})
+                @components.LoginForm(false, "","")
             }
         </div>
     }
