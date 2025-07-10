@@ -1,9 +1,9 @@
-package notes
+package notespage
 
 import "musiikkiProjektit/views/layouts"
 import "musiikkiProjektit/session"
 
-templ NotesPage(sessionData session.Session){
+templ Page(sessionData session.Session){
     @layouts.Base(sessionData){
         <h2>Notes</h2>
         if sessionData.LoggedIn{

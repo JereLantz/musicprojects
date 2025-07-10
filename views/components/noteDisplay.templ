@@ -1,9 +1,9 @@
 package components
 
-import "musiikkiProjektit/utils"
 import "strconv"
+import "musiikkiProjektit/notes"
 
-templ NoteDisplay(notes []utils.Note){
+templ NoteDisplay(notes []notes.Note){
     if len(notes) == 0 {
         <p>No notes found</p>
     } else {

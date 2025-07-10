@@ -5,10 +5,3 @@ type Credentials struct{
 	Password string
 }
 
-type Note struct {
-	Id int
-	Title string
-	Note string
-	//TODO: lisää timestamp?
-}
-
