@@ -2,6 +2,7 @@ package notes
 
 import "database/sql"
 
+// Note represents the structure of a saved note
 type Note struct {
 	Id int
 	Title string
@@ -9,6 +10,9 @@ type Note struct {
 	//TODO: lisää timestamp?
 }
 
+// GetUsersNotes returns a slice of Note structs and an error
+//
+// Requires db pointer and the users username
 func GetUsersNotes(db *sql.DB, username string) ([]Note, error){
 	var userNotes []Note
 	//TODO: hae myös time stamp?

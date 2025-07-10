@@ -16,6 +16,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// dbConnect establishes the database connection
 func dbConnect() (*sql.DB, error){
 	db, err := sql.Open("sqlite3", "database.db")
 	if err != nil {
@@ -30,6 +31,8 @@ func dbConnect() (*sql.DB, error){
 	return db, nil
 }
 
+// initializeDBSchema initializes the database schema on startup
+// if it does not exist
 func initializeDBSchema(db *sql.DB) error{
 	err := initializeUsersSchema(db)
 	if err != nil {
