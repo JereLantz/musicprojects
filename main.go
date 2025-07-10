@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"musiikkiProjektit/auth"
 	"musiikkiProjektit/handlers"
 	"musiikkiProjektit/session"
-	"musiikkiProjektit/views/index"
 	"net/http"
 	"os"
 	"strconv"
@@ -15,28 +15,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 )
-
-func handleServeIndex(w http.ResponseWriter, r *http.Request){
-	if r.URL.Path != "/"{
-		w.WriteHeader(404)
-		return
-	}
-	cookie, err := r.Cookie(session.SessionTokenName)
-	if err != nil{
-		w.WriteHeader(200)
-		index.Index(session.Session{}).Render(r.Context(), w)
-		return
-	}
-	sessionData, err := session.GetSession(cookie.Value)
-	if err != nil {
-		index.Index(session.Session{}).Render(r.Context(), w)
-		log.Printf("could not get session information when serving the index %s\n", err)
-		return
-	}
-
-	w.WriteHeader(200)
-	index.Index(sessionData).Render(r.Context(), w)
-}
 
 func dbConnect() (*sql.DB, error){
 	db, err := sql.Open("sqlite3", "database.db")
@@ -172,7 +150,7 @@ func main(){
 	// for testing ====
 	testUserName := "test"
 	testUserPassword := "123"
-	err = handlers.CreateNewUser(db, testUserName, testUserPassword )
+	err = auth.CreateNewUser(db, testUserName, testUserPassword )
 	if err != nil {
 		if err.Error() != "UNIQUE constraint failed: users.username"{
 			log.Fatalln(err)
@@ -181,7 +159,7 @@ func main(){
 	//===
 
 	// Pages
-	handler.HandleFunc("GET /", session.HandleSessionMiddleware(handleServeIndex))
+	handler.HandleFunc("GET /", session.HandleSessionMiddleware(handlers.HandleServeIndex))
 	handler.HandleFunc("GET /notes", session.HandleSessionMiddleware(handlers.HandleServeNotes))
 	handler.HandleFunc("GET /chordprogress", session.HandleSessionMiddleware(handlers.HandleServeChordProg))
 	handler.HandleFunc("GET /keyquiz", session.HandleSessionMiddleware(handlers.HandleServeKeyQuiz))

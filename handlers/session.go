@@ -3,16 +3,13 @@ package handlers
 import (
 	"database/sql"
 	"log"
+	"musiikkiProjektit/auth"
 	"musiikkiProjektit/session"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/login"
 	"net/http"
 	"time"
-
-	"golang.org/x/crypto/bcrypt"
 )
-
-const bcryptCost = 12
 
 func HandleLoginPage(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
@@ -41,7 +38,7 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 
 	inputtedUsername := r.FormValue("login-uname")
 	inputtedPassword := r.FormValue("login-passwd")
-	err = checkUserCredentials(db, inputtedUsername, inputtedPassword)
+	err = auth.CheckUserCredentials(db, inputtedUsername, inputtedPassword)
 
 	if err == nil {
 		log.Printf("Successfull login %s\n", inputtedUsername)
@@ -57,22 +54,6 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 
 	log.Printf("Failed login, %s\n", err)
 	components.LoginForm(true, inputtedUsername, inputtedPassword).Render(r.Context(), w)
-}
-
-func checkUserCredentials(db *sql.DB, uname, passwd string) error{
-	fetchPasswdQuery := `SELECT password FROM users WHERE username = ?;`
-	var storedPasswd []byte
-
-	passRow := db.QueryRow(fetchPasswdQuery, uname)
-
-	err := passRow.Scan(&storedPasswd)
-	if err != nil {
-		return err
-	}
-
-	err = bcrypt.CompareHashAndPassword(storedPasswd, []byte(passwd))
-
-	return err
 }
 
 func HandleLogout(w http.ResponseWriter, r *http.Request){
@@ -91,18 +72,4 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 		Expires: time.Now(),
 	})
 	http.Redirect(w,r,"/", 303)
-}
-
-func CreateNewUser(db *sql.DB, username, password string) error{
-	createNewUserQuery := `INSERT INTO users(username, password) VALUES(?,?);`
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcryptCost)
-	if err != nil {
-		return err
-	}
-
-	_, err = db.Exec(createNewUserQuery, username, passwordHash)
-	if err != nil {
-		return err
-	}
-	return nil
 }
