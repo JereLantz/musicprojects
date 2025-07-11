@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"musiikkiProjektit/session"
 	"musiikkiProjektit/views/pages"
 	"net/http"
@@ -11,13 +10,13 @@ import (
 func HandleServeChordProg(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
-		log.Printf("Failed to fetch the session for displaying the chord prog page. %s\n", err)
-		w.WriteHeader(500)
+		w.WriteHeader(200)
+		pages.ChordProg(session.Session{}).Render(r.Context(), w)
 		return
 	}
 	sessionData, err := session.GetSession(cookie.Value)
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(200)
 		pages.ChordProg(session.Session{}).Render(r.Context(), w)
 		return
 	}
