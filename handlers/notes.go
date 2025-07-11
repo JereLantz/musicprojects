@@ -6,7 +6,7 @@ import (
 	"musiikkiProjektit/session"
 	"musiikkiProjektit/notes"
 	"musiikkiProjektit/views/components"
-	"musiikkiProjektit/views/notespage"
+	"musiikkiProjektit/views/pages"
 	"net/http"
 )
 
@@ -14,17 +14,17 @@ func HandleServeNotes(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
 		w.WriteHeader(200)
-		notespage.Page(session.Session{}).Render(r.Context(), w)
+		pages.Notes(session.Session{}).Render(r.Context(), w)
 		return
 	}
 	sessionData, err := session.GetSession(cookie.Value)
 	if err != nil {
 		w.WriteHeader(200)
-		notespage.Page(session.Session{}).Render(r.Context(), w)
+		pages.Notes(session.Session{}).Render(r.Context(), w)
 		return
 	}
 	w.WriteHeader(200)
-	notespage.Page(sessionData).Render(r.Context(), w)
+	pages.Notes(sessionData).Render(r.Context(), w)
 }
 
 func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){

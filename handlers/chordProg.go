@@ -3,7 +3,7 @@ package handlers
 import (
 	"log"
 	"musiikkiProjektit/session"
-	"musiikkiProjektit/views/chordProgress"
+	"musiikkiProjektit/views/pages"
 	"net/http"
 )
 
@@ -17,9 +17,9 @@ func HandleServeChordProg(w http.ResponseWriter, r *http.Request){
 	}
 	sessionData, err := session.GetSession(cookie.Value)
 	if err != nil {
-		chordprogress.ChordProgPage(session.Session{}).Render(r.Context(), w)
 		w.WriteHeader(500)
+		pages.ChordProg(session.Session{}).Render(r.Context(), w)
 		return
 	}
-	chordprogress.ChordProgPage(sessionData).Render(r.Context(), w)
+	pages.ChordProg(sessionData).Render(r.Context(), w)
 }
