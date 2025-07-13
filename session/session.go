@@ -47,8 +47,6 @@ func UpdateSession(updatedSession Session, id string) error{
 		return errors.New("No session found with given id")
 	}
 
-	DeleteSession(id)
-
 	sessions[id] = updatedSession
 	return nil
 }
