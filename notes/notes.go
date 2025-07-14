@@ -36,40 +36,30 @@ func GetUsersNotes(db *sql.DB, username string) ([]Note, error){
 	return userNotes, nil
 }
 
-// TODO: muuta näitä siten että on 1 validate field functio ja tallenna funktio
-func ParseNewNote(db *sql.DB, noteData Note, username string) (error,[]string){
+
+// SaveNewNote creates new note from the note struct for the user with the
+// supplied username in supplied database.
+//
+// Return error if not successful
+func (n Note)SaveNewNote(db *sql.DB, username string) (error){
 	insertQuery := `
 	INSERT INTO notes(user_id, title, note, created)
 	VALUES((SELECT id FROM users where username = ?),?,?, datetime('now'));
 	`
-	var errors []string
-	errors = append(errors, ValidateNewNoteTitle(noteData.Title)...)
-	errors = append(errors, ValidateNewNoteText(noteData.Note)...)
-	if len(errors) > 0{
-		return nil, errors
-	}
-
-	_, err := db.Exec(insertQuery, username, noteData.Title, noteData.Note)
+	_, err := db.Exec(insertQuery, username, n.Title, n.Note)
 	if err != nil {
-		return err, nil
+		return err
 	}
-	return nil, errors
+	return nil
 }
 
-func ValidateNewNoteTitle(title string) []string{
-	var errors []string
-	//TODO: joku parempi validointi
-	if len(title) < 3{
-		errors = append(errors, "Title too short. It should be atleast 3 characters")
-	}
-	return errors
-}
 
-func ValidateNewNoteText(text string) []string{
-	var errors []string
-	//TODO: joku parempi validointi
-	if len(text) < 5{
-		errors = append(errors, "Note too short. It should be atleast 5 characters")
-	}
-	return errors
+// ValidateNoteFields checks that the fields contain valid data
+//
+// returns a string array that contains the possible user input errors,
+// and error for possible parsing errors
+func (n Note)Validate() ([]string, error){
+	var userErrors []string
+	//TODO:
+	return userErrors, nil
 }

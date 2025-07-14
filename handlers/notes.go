@@ -92,15 +92,14 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		Note: r.FormValue("newNote"),
 	}
 
-	err, errors := notes.ParseNewNote(db, newNote, userSession.Username)
+	inputErrors, err := newNote.Validate()
+
+	err = newNote.SaveNewNote(db, userSession.Username)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(500)
 		return
 	}
 
-	err = components.NewNoteForm(newNote, errors).Render(r.Context(), w)
-	if err != nil {
-		log.Println(err)
-	}
+	components.NewNoteForm(newNote, inputErrors).Render(r.Context(), w)
 }
