@@ -93,6 +93,10 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	}
 
 	inputErrors, err := newNote.Validate()
+	if err != nil {
+		components.NewNoteForm(newNote, inputErrors).Render(r.Context(), w)
+		return
+	}
 
 	err = newNote.SaveNewNote(db, userSession.Username)
 	if err != nil {
@@ -102,5 +106,5 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	}
 
 	//TODO: joku vastaus joka päivittää uuden noten UI:n jos sen tallennus onnistui
-	components.NewNoteForm(newNote, inputErrors).Render(r.Context(), w)
+	components.NewNoteForm(newNote, []string{}).Render(r.Context(), w)
 }
