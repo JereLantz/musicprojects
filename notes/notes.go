@@ -12,11 +12,15 @@ type Note struct {
 
 // GetUsersNotes returns a slice of Note structs and an error
 //
+// The notes are ordered in a descending order, based on note id
+//
 // Requires db pointer and the users username
 func GetUsersNotes(db *sql.DB, username string) ([]Note, error){
 	var userNotes []Note
 	//TODO: hae myös time stamp?
-	query := `SELECT note_id, title, note FROM NOTES WHERE user_id = (SELECT id FROM users WHERE username = ?);`
+	query := `SELECT note_id, title, note
+	FROM NOTES WHERE user_id = (SELECT id FROM users WHERE username = ?)
+	ORDER BY note_id DESC;`
 
 	row, err := db.Query(query, username)
 	if err != nil {
