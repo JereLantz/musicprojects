@@ -144,6 +144,9 @@ func main(){
 	server := http.Server{
 		Addr: ":" + strconv.Itoa(configs.Port),
 		Handler: handler,
+		ReadTimeout: 30 * time.Second,
+		WriteTimeout: 90 * time.Second,
+		IdleTimeout: 120 * time.Second,
 	}
 
 	db, err := dbConnect()
