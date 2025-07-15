@@ -17,6 +17,9 @@ import (
 )
 
 // dbConnect establishes the database connection
+//
+// returns a pointer to the database and nil,
+// or nil and error if the connection could not be established
 func dbConnect() (*sql.DB, error){
 	db, err := sql.Open("sqlite3", "database.db")
 	if err != nil {
@@ -101,12 +104,16 @@ func initializeSessionStorage(db *sql.DB) error {
 	return nil
 }
 
-type config struct{
+// configs is a struct that contains the configurations that can be done outside
+// the program
+var configs struct{
 	Port int `json:"port"`
 }
 
-var configs config
-
+// readConfigs reads the configurations from the config.json file in the current
+// directory, to a configs struct.
+//
+// returns error if reading was not successful
 func readConfigs() error{
 	file, err := os.Open("./config.json")
 	if err != nil {
