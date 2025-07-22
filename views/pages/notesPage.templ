@@ -2,17 +2,16 @@ package pages
 
 import "musiikkiProjektit/views/layouts"
 import "musiikkiProjektit/session"
+import "musiikkiProjektit/views/components"
 
 templ Notes(sessionData session.Session){
     @layouts.Base(sessionData){
         <h2>Notes</h2>
         if sessionData.LoggedIn{
-            <button hx-get="/notes/form" hx-swap="outerHTML">
-                Add new note
-            </button>
+            @components.NewNoteBtn()
 
-            <div id="note-container">
-                <p hx-trigger="load" hx-get="/api/notes" hx-target="#note-container">
+            <div id="notes-container">
+                <p hx-trigger="load" hx-get="/api/notes" hx-target="#notes-container">
                     Fetching saved notes...
                 </p>
             </div>

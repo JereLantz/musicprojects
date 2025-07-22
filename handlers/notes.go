@@ -105,6 +105,6 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	//TODO: joku vastaus joka päivittää uuden noten UI:n jos sen tallennus onnistui
-	components.NewNoteForm(newNote, []string{}).Render(r.Context(), w)
+	w.WriteHeader(200)
+	components.NoteSavedResp(newNote).Render(r.Context(), w)
 }

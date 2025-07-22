@@ -1,0 +1,11 @@
+package components
+
+import "musiikkiProjektit/notes"
+
+templ NoteSavedResp(savedNote notes.Note){
+    @NewNoteBtn()
+
+    <div id="notes-container" hx-swap-oob="afterbegin">
+        @Note(savedNote)
+    </div>
+}

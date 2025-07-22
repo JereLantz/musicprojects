@@ -1,0 +1,24 @@
+package components
+
+import "musiikkiProjektit/notes"
+import "strconv"
+import "strings"
+
+templ Note(note notes.Note){
+    <div id={"note_containder_" + strconv.Itoa(note.Id)}>
+        <div id={"note" + strconv.Itoa(note.Id)}>
+        <h3>{note.Title}</h3>
+        if rows := strings.Split(note.Note, "\n") ; len(rows) > 1 {
+            for _, row := range rows{
+                <p>{row}</p>
+            }
+        }else {
+            <p>{note.Note}</p>
+        }
+    </div>
+        <div>
+            <button>Edit</button>
+            <button>Delete</button>
+        </div>
+    </div>
+}
