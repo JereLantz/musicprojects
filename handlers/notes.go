@@ -53,10 +53,13 @@ func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(500)
 		return
 	}
+
+	w.Header().Set("Content-Type","text/html")
 	components.NoteDisplay(userNotes).Render(r.Context(), w)
 }
 
 func HandleNewNoteForm(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type","text/html")
 	components.NewNoteForm(notes.Note{}, []string{}).Render(r.Context(), w)
 }
 
@@ -94,6 +97,7 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 
 	inputErrors, err := newNote.Validate()
 	if err != nil {
+		w.Header().Set("Content-Type","text/html")
 		components.NewNoteForm(newNote, inputErrors).Render(r.Context(), w)
 		return
 	}
@@ -105,6 +109,7 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		return
 	}
 
+	w.Header().Set("Content-Type","text/html")
 	w.WriteHeader(200)
 	components.NoteSavedResp(newNote).Render(r.Context(), w)
 }

@@ -83,6 +83,8 @@ func HandleCheckQuiz(w http.ResponseWriter, r *http.Request){
 		log.Printf("Error parsing the answer: %s\n", err)
 		return
 	}
+
+	w.Header().Set("Content-Type","text/html")
 	components.KeyQuizCheckResp(answerCorrect).Render(r.Context(), w)
 }
 
