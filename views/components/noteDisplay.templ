@@ -2,16 +2,23 @@ package components
 
 import "strconv"
 import "musiikkiProjektit/notes"
+import "strings"
 
 templ NoteDisplay(notes []notes.Note){
     if len(notes) == 0 {
         <p>No notes found</p>
     } else {
         for _, note := range notes {
-            <div id={"note_containder_" + strconv.Itoa(note.Id)}>
+            <div id={"notes_containder_" + strconv.Itoa(note.Id)}>
                 <div id={"note" + strconv.Itoa(note.Id)}>
                     <h3>{note.Title}</h3>
-                    <p>{note.Note}</p>
+                    if rows := strings.Split(note.Note, "\n") ; len(rows) > 1 {
+                        for _, row := range rows{
+                            <p>{row}</p>
+                        }
+                    }else {
+                        <p>{note.Note}</p>
+                    }
                 </div>
                 <div>
                     <button>Edit</button>
