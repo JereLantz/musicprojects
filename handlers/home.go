@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+// HandleServeIndex renders the home page for the request. Checks that the 
+// request is for the / path, and not else.
+//
+// requires http response writer and request
 func HandleServeIndex(w http.ResponseWriter, r *http.Request){
 	if r.URL.Path != "/"{
 		w.WriteHeader(404)

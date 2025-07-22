@@ -10,6 +10,9 @@ import (
 	"net/http"
 )
 
+// HandleServeNotes serves the page for saving and displaying notes.
+//
+// Is a http handler function
 func HandleServeNotes(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{
@@ -27,6 +30,11 @@ func HandleServeNotes(w http.ResponseWriter, r *http.Request){
 	pages.Notes(sessionData).Render(r.Context(), w)
 }
 
+// HandleGetSavedNotes is an endpoint that fetches all notes that the user
+// has taken. Checks that the user is logged in and the session is valid before
+// responding.
+//
+// requires database connection for fetching the data. Is a http handler function
 func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil {
@@ -58,11 +66,19 @@ func HandleGetSavedNotes(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	components.NoteDisplay(userNotes).Render(r.Context(), w)
 }
 
+// HandleNewNoteForm is a simple endpoint that swaps the new note button
+// for the new note form
+//
+// Is a http handler function
 func HandleNewNoteForm(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type","text/html")
 	components.NewNoteForm(notes.Note{}, []string{}).Render(r.Context(), w)
 }
 
+// HandleCreateNewNote is an endpoint that handles the functionality of saving
+// new note.
+//
+// Requires database connection. Is a http handler function
 func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil {

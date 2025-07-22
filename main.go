@@ -36,6 +36,8 @@ func dbConnect() (*sql.DB, error){
 
 // initializeDBSchema initializes the database schema on startup
 // if it does not exist
+//
+// requires a database pointer, and return error if initialization was not successful
 func initializeDBSchema(db *sql.DB) error{
 	err := initializeUsersSchema(db)
 	if err != nil {
@@ -55,6 +57,10 @@ func initializeDBSchema(db *sql.DB) error{
 	return nil
 }
 
+// initializeUsersSchema creates the schema for saving users,
+// if the table does not exist
+//
+// requires a database pointer, and return error if initialization was not successful
 func initializeUsersSchema(db *sql.DB) error{
 	initQuery := `CREATE TABLE IF NOT EXISTS users(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,6 +76,10 @@ func initializeUsersSchema(db *sql.DB) error{
 	return nil
 }
 
+// initializeNotesSchema creates the schema for saving notes,
+// if the table does not exist
+//
+// requires a database pointer, and return error if initialization was not successful
 func initializeNotesSchema(db *sql.DB) error{
 	initQuery := `CREATE TABLE IF NOT EXISTS notes(
 		note_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -88,6 +98,10 @@ func initializeNotesSchema(db *sql.DB) error{
 	return nil
 }
 
+// initializeSessionStorage creates the schema for saving session data,
+// if the table does not exist
+//
+// requires a database pointer, and return error if initialization was not successful
 func initializeSessionStorage(db *sql.DB) error {
 	query := `CREATE TABLE IF NOT EXISTS sessions(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,

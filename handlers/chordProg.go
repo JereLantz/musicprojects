@@ -7,6 +7,9 @@ import (
 )
 
 
+// HandleServeChordProg renders the Chord Progression training page to the request
+//
+// Requires http response writer and a request pointer
 func HandleServeChordProg(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil{

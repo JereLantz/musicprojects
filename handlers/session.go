@@ -56,6 +56,8 @@ func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	components.LoginForm(true, inputtedUsername, inputtedPassword).Render(r.Context(), w)
 }
 
+// HandleLogout handles logging the user out. Then redirects the user
+// to the home page.
 func HandleLogout(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie(session.SessionTokenName)
 	if err != nil {
