@@ -1,13 +1,16 @@
 package notes
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 // Note represents the structure of a saved note
 type Note struct {
 	Id int
 	Title string
 	Note string
-	//TODO: lisää timestamp?
+	Created time.Time
 }
 
 // GetUsersNotes returns a slice of Note structs and an error
@@ -17,8 +20,7 @@ type Note struct {
 // Requires db pointer and the users username
 func GetUsersNotes(db *sql.DB, username string) ([]Note, error){
 	var userNotes []Note
-	//TODO: hae myös time stamp?
-	query := `SELECT note_id, title, note
+	query := `SELECT note_id, title, note, created
 	FROM NOTES WHERE user_id = (SELECT id FROM users WHERE username = ?)
 	ORDER BY note_id DESC;`
 
@@ -30,7 +32,12 @@ func GetUsersNotes(db *sql.DB, username string) ([]Note, error){
 
 	for row.Next(){
 		var note Note
-		err = row.Scan(&note.Id, &note.Title, &note.Note)
+		var timeStr string
+		err = row.Scan(&note.Id, &note.Title, &note.Note, &timeStr)
+		if err != nil {
+			return []Note{}, err
+		}
+		note.Created, err = time.Parse(time.RFC3339, timeStr)
 		if err != nil {
 			return []Note{}, err
 		}
@@ -46,11 +53,12 @@ func GetUsersNotes(db *sql.DB, username string) ([]Note, error){
 //
 // Return error if not successful
 func (n Note)SaveNewNote(db *sql.DB, username string) (error){
+	now := time.Now()
 	insertQuery := `
 	INSERT INTO notes(user_id, title, note, created)
-	VALUES((SELECT id FROM users where username = ?),?,?, datetime('now'));
+	VALUES((SELECT id FROM users where username = ?),?,?, ?);
 	`
-	_, err := db.Exec(insertQuery, username, n.Title, n.Note)
+	_, err := db.Exec(insertQuery, username, n.Title, n.Note, now.Format(time.RFC3339))
 	if err != nil {
 		return err
 	}
