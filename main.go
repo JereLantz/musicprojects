@@ -91,8 +91,9 @@ func initializeNotesSchema(db *sql.DB) error{
 func initializeSessionStorage(db *sql.DB) error {
 	query := `CREATE TABLE IF NOT EXISTS sessions(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		session_id TEXT UNIQUE NOT NULL,
 		user_id INTEGER,
+		ip TEXT NOT NULL,
+		timestamp TEXT NOT NULL,
 		FOREIGN KEY(user_id) REFERENCES users(id)
 	);`
 
