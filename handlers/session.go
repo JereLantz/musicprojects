@@ -73,5 +73,6 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 		Value: "",
 		Expires: time.Now(),
 	})
-	http.Redirect(w,r,"/", 303)
+	requestUrl := r.Header.Get("referer")
+	http.Redirect(w,r, requestUrl, 303)
 }
