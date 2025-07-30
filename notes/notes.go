@@ -75,3 +75,18 @@ func (n Note)Validate() ([]string, error){
 	//TODO:
 	return userErrors, nil
 }
+
+
+// DeleteNote deletes a note with the specified id from the user with the
+// specified username
+//
+// Returns error if unsuccessful
+func DeleteNote(db *sql.DB, noteID int, username string) error {
+	query := `DELETE FROM notes WHERE note_id = ? AND user_id = (SELECT id FROM users WHERE username = ?);`
+
+	_, err := db.Exec(query, noteID, username)
+	if err != nil {
+		return err
+	}
+	return nil
+}

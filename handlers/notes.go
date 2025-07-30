@@ -3,11 +3,12 @@ package handlers
 import (
 	"database/sql"
 	"log"
-	"musiikkiProjektit/session"
 	"musiikkiProjektit/notes"
+	"musiikkiProjektit/session"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/pages"
 	"net/http"
+	"strconv"
 )
 
 // HandleServeNotes serves the page for saving and displaying notes.
@@ -128,4 +129,41 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type","text/html")
 	w.WriteHeader(200)
 	components.NoteSavedResp(newNote).Render(r.Context(), w)
+}
+
+
+// HandleDeleteNote is the endpoint for deleting a note.
+//
+// http handler function
+func HandleDeleteNote(db *sql.DB, w http.ResponseWriter, r *http.Request) {
+	noteIdStr := r.PathValue("id")
+	noteId, err := strconv.Atoi(noteIdStr)
+	if err != nil {
+		log.Println("HandleDeleteNote() parsing noteId from path:", err)
+		w.WriteHeader(400)
+		return
+	}
+
+	cookie, err := r.Cookie(session.SessionTokenName)
+	if err != nil {
+		log.Println("HandleDeleteNote() getting the requests cookie:", err)
+		w.WriteHeader(401)
+		return
+	}
+
+	session, err := session.GetSession(cookie.Value)
+	if err != nil {
+		log.Println("HandleDeleteNote() getting the session:", err)
+		w.WriteHeader(401)
+		return
+	}
+
+	err = notes.DeleteNote(db, noteId, session.Username)
+	if err != nil {
+		log.Println("HandleDeleteNote() calling the DeleteNote():", err)
+		w.WriteHeader(500)
+		return
+	}
+
+	w.WriteHeader(200)
 }

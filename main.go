@@ -217,6 +217,9 @@ func main(){
 	handler.HandleFunc("GET /api/notes", func(w http.ResponseWriter, r *http.Request) { 
 		handlers.HandleGetSavedNotes(db, w, r)
 	})
+	handler.HandleFunc("DELETE /notes/{id}", func(w http.ResponseWriter, r *http.Request) {
+		handlers.HandleDeleteNote(db, w, r)
+	})
 
 
 	// Files
