@@ -2,11 +2,62 @@ package pages
 
 import "musiikkiProjektit/views/layouts"
 import "musiikkiProjektit/session"
+import "musiikkiProjektit/views/components"
 
 templ ChordProg(sessionData session.Session){
     @layouts.Base(sessionData){
+        <h2>
+            Chord progress
+        </h2>
         <p>
-            Helloworld chordprog
+            Get any of the diatonic chords for the specified key
         </p>
+
+        <div id="chordProgDisplay">
+            <form action="/chordprogress" method="post">
+                <div>
+                    <h3>Select the Key:</h3>
+                    <label for="keySelect">Key:</label>
+                    <select id="keySelect" name="keySelect">
+                        <option value="C">C</option>
+                        <option value="G">G</option>
+                        <option value="D">D</option>
+                        <option value="A">A</option>
+                        <option value="E">E</option>
+                        <option value="B">B</option>
+                        <option value="F#">F#</option>
+                        <option value="C#">C#</option>
+                        <option value="F">F</option>
+                        <option value="Bb">Bb</option>
+                        <option value="Eb">Eb</option>
+                        <option value="Ab">Ab</option>
+                        <option value="Db">Db</option>
+                        <option value="Gb">Gb</option>
+                        <option value="Cb">Cb</option>
+                    </select>
+                </div>
+                <div>
+                    <h3>Wanted chord types:</h3>
+                    <label for="triadType">Triads:</label>
+                    <input id="triadType" type="radio" name="chordType" value="triad" checked>
+                    <label for="7chordType">7-chords:</label>
+                    <input id="7chordType" type="radio" name="chordType" value="7chord">
+                    <label for="noType">None:</label>
+                    <input id="noType" type="radio" name="chordType" value="none">
+                </div>
+                <div>
+                    <h3>Chords:</h3>
+                    <div id="chordSelectors">
+                        for range 4 {
+                            @components.ChordSelect()
+                        }
+                    </div>
+                </div>
+                <button type="submit">Get</button>
+            </form>
+
+            <div id="chordDisplay">
+            </div>
+        </div>
     }
 }
