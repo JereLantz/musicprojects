@@ -4,8 +4,12 @@ import "musiikkiProjektit/notes"
 
 templ EditNote(note notes.Note){
     <div>
-        <input required name="newNoteTitle" type="text" placeholder="Title" value={note.Title}>
+        <label for="editTitle">Title:</label>
         <br/>
-        <textarea required name="newNote" rows="10" cols="100" placeholder="Add note">{note.Note}</textarea>
+        <input id="editTitle" required name="title" type="text" placeholder="Title" value={note.Title}>
+        <br/>
+        <label for="editNote">Note:</label>
+        <br/>
+        <textarea id="editNote" required name="note" rows="10" cols="100" placeholder="Note text">{note.Note}</textarea>
     </div>
 }
