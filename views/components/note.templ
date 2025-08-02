@@ -21,6 +21,7 @@ templ Note(note notes.Note){
             hx-swap="outerHTML"
             hx-target="#main-content"
             hx-select="#main-content"
+            hx-push-url="true"
             >Edit</button>
 
             <button hx-delete={"/notes/" + strconv.Itoa(note.Id)}
