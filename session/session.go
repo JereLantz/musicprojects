@@ -40,10 +40,17 @@ func GetSession(id string) (Session, error){
 // returns bool that whether session exists (true = exists), session data as 
 // a session struct, and an error
 func GetSessionFromRequest(r *http.Request) (bool, Session, error){
-	//TODO:
-	//cookies, err := r.Cookie(SessionTokenName)
+	cookie, err := r.Cookie(SessionTokenName)
+	if err != nil {
+		return false, Session{}, err
+	}
 
-	return false, Session{}, nil
+	session, ok := sessions[cookie.Value]
+	if !ok {
+		return false, Session{}, nil
+	}
+
+	return true, session, nil
 }
 
 func DeleteSession(id string) error{

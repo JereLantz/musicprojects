@@ -172,7 +172,6 @@ func HandleDeleteNote(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 //
 // http handler function
 func HandleEditNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
-	//TODO:
 	noteIdStr := r.PathValue("id")
 	noteId, err := strconv.Atoi(noteIdStr)
 	if err != nil {
