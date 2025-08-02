@@ -1,0 +1,19 @@
+package pages
+
+import "musiikkiProjektit/notes"
+import "musiikkiProjektit/views/components"
+import "musiikkiProjektit/views/layouts"
+import "musiikkiProjektit/session"
+
+templ EditNote(session session.Session , note notes.Note) {
+    @layouts.Base(session){
+        <h2>Edit note</h2>
+        <div>
+            @components.EditNote(note)
+            <div>
+                <button>Save</button>
+                <button>Cancel</button>
+            </div>
+        </div>
+    }
+}

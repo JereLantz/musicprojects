@@ -167,3 +167,39 @@ func HandleDeleteNote(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(200)
 }
+
+// HandleEditNote serves the edit page
+//
+// http handler function
+func HandleEditNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
+	//TODO:
+	noteIdStr := r.PathValue("id")
+	noteId, err := strconv.Atoi(noteIdStr)
+	if err != nil {
+		log.Println("HandleEditNote() parsing note id from string:", err)
+		w.WriteHeader(400)
+		return
+	}
+
+	cookie, err := r.Cookie(session.SessionTokenName)
+	if err != nil {
+		log.Println("HandleEditNote() getting cookie:", err)
+		w.WriteHeader(400)
+		return
+	}
+
+	session, err := session.GetSession(cookie.Value)
+	if err != nil || !session.LoggedIn {
+		log.Println("HandleEditNote() getting session:", err)
+		w.WriteHeader(400)
+		return
+	}
+
+	note, err := notes.GetNote(db, noteId, session.Username)
+	if err != nil{
+		log.Println("HandleEditNote() getting note:", err)
+		w.WriteHeader(400)
+		return
+	}
+	pages.EditNote(session, note).Render(r.Context(), w)
+}

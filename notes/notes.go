@@ -90,3 +90,27 @@ func DeleteNote(db *sql.DB, noteID int, username string) error {
 	}
 	return nil
 }
+
+
+// GetNote Fetches a specific note from the database using the notes id an username
+//
+// returns Note struct with the data and nil, or empty Note struct and an error
+func GetNote(db *sql.DB, noteID int, username string) (Note, error) {
+	var note Note
+	var timeStamp string
+	query := `SELECT note_id, title, note, created FROM notes WHERE note_id =? AND user_id = (SELECT id FROM users WHERE username = ?);`
+
+	row := db.QueryRow(query, noteID, username)
+
+	err := row.Scan(&note.Id, &note.Title, &note.Note, &timeStamp)
+	if err != nil {
+		return Note{}, err
+	}
+
+	note.Created, err = time.Parse(time.RFC3339, timeStamp)
+	if err != nil {
+		return Note{}, err
+	}
+
+	return note, nil
+}

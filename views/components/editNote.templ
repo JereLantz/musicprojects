@@ -1,0 +1,11 @@
+package components
+
+import "musiikkiProjektit/notes"
+
+templ EditNote(note notes.Note){
+    <div>
+        <input required name="newNoteTitle" type="text" placeholder="Title" value={note.Title}>
+        <br/>
+        <textarea required name="newNote" rows="10" cols="100" placeholder="Add note">{note.Note}</textarea>
+    </div>
+}

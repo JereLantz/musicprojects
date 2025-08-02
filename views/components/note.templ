@@ -17,8 +17,13 @@ templ Note(note notes.Note){
         }
     </div>
         <div>
-            <button>Edit</button>
-            <button hx-delete={"notes/" + strconv.Itoa(note.Id)}
+            <button hx-get={"/notes/" + strconv.Itoa(note.Id)}
+            hx-swap="outerHTML"
+            hx-target="#main-content"
+            hx-select="#main-content"
+            >Edit</button>
+
+            <button hx-delete={"/notes/" + strconv.Itoa(note.Id)}
             hx-target={"#note_containder_" + strconv.Itoa(note.Id)}
             hx-swap="outerHTML"
             >Delete</button>
