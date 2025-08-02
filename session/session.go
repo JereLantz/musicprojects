@@ -13,6 +13,7 @@ import (
 
 var sessions = map[string]Session{}
 
+// SessionTokenName is the name used for the cookie on the client
 const SessionTokenName = "session_token"
 
 type Session struct {
@@ -21,6 +22,9 @@ type Session struct {
 	Expiry time.Time
 }
 
+// GetSession attempts to get the session data from the id string
+//
+// return an error if no session exists
 func GetSession(id string) (Session, error){
 	var requestedSession Session
 
@@ -29,6 +33,17 @@ func GetSession(id string) (Session, error){
 		return requestedSession, errors.New("No session found with requested id")
 	}
 	return requestedSession,nil
+}
+
+// GetSessionFromRequest attempts to get the session data from a request
+//
+// returns bool that whether session exists (true = exists), session data as 
+// a session struct, and an error
+func GetSessionFromRequest(r *http.Request) (bool, Session, error){
+	//TODO:
+	//cookies, err := r.Cookie(SessionTokenName)
+
+	return false, Session{}, nil
 }
 
 func DeleteSession(id string) error{
@@ -164,6 +179,12 @@ func HandleSessionMiddleware(f http.HandlerFunc) http.HandlerFunc{
 				log.Printf("Failed to create session: %s\n", err)
 				return
 			}
+
+			// Delete old cookie, if it exists
+			http.SetCookie(w, &http.Cookie{
+				Name: SessionTokenName,
+				Expires: time.Now(),
+			})
 
 			http.SetCookie(w, &http.Cookie{
 				Name: SessionTokenName,
