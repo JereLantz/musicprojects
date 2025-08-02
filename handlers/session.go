@@ -2,13 +2,13 @@ package handlers
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"musiikkiProjektit/auth"
 	"musiikkiProjektit/session"
 	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/pages"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -75,14 +75,18 @@ func HandleLogout(w http.ResponseWriter, r *http.Request){
 		Expires: time.Now(),
 	})
 	requestUrl := r.Header.Get("referer")
+	parsedUrl, err := url.Parse(requestUrl)
+	if err != nil {
+		http.Redirect(w,r, "/", 303)
+		return
+	}
 
-	domain := "http://localhost:42069"
-	switch requestUrl {
-	case fmt.Sprint(domain + "/keyquiz"):
+	switch parsedUrl.Path {
+	case "/keyquiz":
 		fallthrough
-	case fmt.Sprint(domain + "/chordprogress"):
+	case "/chordprogress":
 		fallthrough
-	case fmt.Sprint(domain + "/notes"):
+	case "/notes":
 		http.Redirect(w,r, requestUrl, 303)
 	default:
 		http.Redirect(w,r, "/", 303)
