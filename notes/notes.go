@@ -51,18 +51,23 @@ func GetUsersNotes(db *sql.DB, username string) ([]Note, error){
 // SaveNewNote creates new note from the note struct for the user with the
 // supplied username in supplied database.
 //
-// Return error if not successful
-func (n Note)SaveNewNote(db *sql.DB, username string) (error){
+// Return the created id and an error if not successful
+func (n Note)SaveNewNote(db *sql.DB, username string) (int, error){
 	now := time.Now()
 	insertQuery := `
 	INSERT INTO notes(user_id, title, note, created)
 	VALUES((SELECT id FROM users where username = ?),?,?, ?);
 	`
-	_, err := db.Exec(insertQuery, username, n.Title, n.Note, now.Format(time.RFC3339))
+	result, err := db.Exec(insertQuery, username, n.Title, n.Note, now.Format(time.RFC3339))
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(id), nil
 }
 
 

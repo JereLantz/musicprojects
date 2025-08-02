@@ -9,6 +9,7 @@ import (
 	"musiikkiProjektit/views/pages"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // HandleServeNotes serves the page for saving and displaying notes.
@@ -119,12 +120,15 @@ func HandleCreateNewNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	err = newNote.SaveNewNote(db, userSession.Username)
+	id, err := newNote.SaveNewNote(db, userSession.Username)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(500)
 		return
 	}
+
+	newNote.Id = id
+	newNote.Created = time.Now()
 
 	w.Header().Set("Content-Type","text/html")
 	w.WriteHeader(200)
