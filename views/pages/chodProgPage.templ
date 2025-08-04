@@ -37,7 +37,7 @@ templ ChordProg(sessionData session.Session){
                     </select>
                 </div>
                 <div>
-                    <h3>Wanted chord types:</h3>
+                    <h3>Chord type:</h3>
                     <label for="triadType">Triads:</label>
                     <input id="triadType" type="radio" name="chordType" value="triad" checked>
                     <label for="7chordType">7-chords:</label>
@@ -46,14 +46,29 @@ templ ChordProg(sessionData session.Session){
                     <input id="noType" type="radio" name="chordType" value="none">
                 </div>
                 <div>
-                    <h3>Chords:</h3>
+                    <h3>Chords and length:</h3>
                     <div id="chordSelectors">
+                        <button type="button"
+                        hx-post="/chordprogress/removeselect"
+                        hx-params="chordSelect"
+                        > - </button>
+
+                        <button type="button"
+                        hx-post="/chordprogress/addselect"
+                        hx-params="chordSelect"
+                        > + </button>
+
+                        <br/>
                         for range 4 {
                             @components.ChordSelect()
                         }
                     </div>
                 </div>
-                <button type="submit">Get</button>
+                <button type="submit"
+                hx-post="/chordprogress"
+                hx-target="#chordDisplay"
+                hx-swap="innerHTML"
+                >Get</button>
             </form>
 
             <div id="chordDisplay">
