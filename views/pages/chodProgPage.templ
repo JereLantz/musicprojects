@@ -47,18 +47,15 @@ templ ChordProg(sessionData session.Session){
                 </div>
                 <div>
                     <h3>Chords and length:</h3>
+                    <button type="button"
+                    onclick="removeChordSelect()"
+                    > - </button>
+
+                    <button type="button"
+                    onclick="addChordSelect()"
+                    > + </button>
+
                     <div id="chordSelectors">
-                        <button type="button"
-                        hx-post="/chordprogress/removeselect"
-                        hx-params="chordSelect"
-                        > - </button>
-
-                        <button type="button"
-                        hx-post="/chordprogress/addselect"
-                        hx-params="chordSelect"
-                        > + </button>
-
-                        <br/>
                         for range 4 {
                             @components.ChordSelect()
                         }
