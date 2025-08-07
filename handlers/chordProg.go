@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"musiikkiProjektit/session"
+	"musiikkiProjektit/views/components"
 	"musiikkiProjektit/views/pages"
 	"net/http"
 )
-
 
 // HandleServeChordProg renders the Chord Progression training page to the request
 //
@@ -24,4 +24,10 @@ func HandleServeChordProg(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	pages.ChordProg(sessionData).Render(r.Context(), w)
+}
+
+
+// HandleGetProgression renders the requested progression on the page
+func HandleGetProgression(w http.ResponseWriter, r *http.Request){
+	components.ChordprogDisplay().Render(r.Context(), w)
 }

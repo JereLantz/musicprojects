@@ -1,0 +1,14 @@
+package components
+
+templ ChordprogDisplay() {
+    <h3>Currently displaying ...TODO (esim Ab:1, 3, 5)</h3>
+
+    <p>Tässä näkyy nuotit, ja soinnut</p>
+
+    <button
+    hx-get="/chordprogress"
+    hx-select="#chordProgDisplay"
+    hx-swap="innteHTML"
+    hx-target="#chordProgDisplay"
+    >Get other progression</button>
+}
