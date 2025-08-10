@@ -12,19 +12,9 @@ import (
 //
 // Requires http response writer and a request pointer
 func HandleServeChordProg(w http.ResponseWriter, r *http.Request){
-	// TODO: tähän tarkistus eka että onko joku query
-	// Käytä getSessionFromRequest?
-	cookie, err := r.Cookie(session.SessionTokenName)
-	if err != nil{
-		w.WriteHeader(200)
-		pages.ChordProg(session.Session{}).Render(r.Context(), w)
-		return
-	}
-	sessionData, err := session.GetSession(cookie.Value)
+	_, sessionData, err := session.GetSessionFromRequest(r)
 	if err != nil {
-		w.WriteHeader(200)
-		pages.ChordProg(session.Session{}).Render(r.Context(), w)
-		return
+		log.Println("HandleServeChordProg() getting session:", err)
 	}
 	params := r.URL.Query()
 
