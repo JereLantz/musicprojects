@@ -224,9 +224,6 @@ func main(){
 		handlers.HandleEditNote(db, w ,r)
 	})
 
-	// Chord progress
-	handler.HandleFunc("POST /chordprogress", handlers.HandleGetProgression)
-
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./public/")))

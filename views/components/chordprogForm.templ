@@ -1,11 +1,11 @@
 package components
 
 templ ChordProgForm(){
-    <form>
+    <form action="/chordprogress" method="get">
         <div>
             <h3>Select the Key:</h3>
             <label for="keySelect">Key:</label>
-            <select id="keySelect" name="keySelect">
+            <select id="keySelect" name="key">
                 <option value="C">C</option>
                 <option value="G">G</option>
                 <option value="D">D</option>
@@ -26,7 +26,7 @@ templ ChordProgForm(){
         <div>
             <h3>Mode:</h3>
             <label for="modeSelect">Mode:</label>
-            <select name="modeSelect" id="modeSelect">
+            <select name="mode" id="modeSelect">
                 <option value="1">I Ionian (major)</option>
                 <option value="2">II Dorian</option>
                 <option value="3">III Phrygian</option>
@@ -39,11 +39,11 @@ templ ChordProgForm(){
         <div>
             <h3>Chord type:</h3>
             <label for="triadType">Triads:</label>
-            <input id="triadType" type="radio" name="chordType" value="triad" checked>
+            <input id="triadType" type="radio" name="type" value="triad" checked>
             <label for="7chordType">7-chords:</label>
-            <input id="7chordType" type="radio" name="chordType" value="7chord">
+            <input id="7chordType" type="radio" name="type" value="7chord">
             <label for="noType">None:</label>
-            <input id="noType" type="radio" name="chordType" value="none">
+            <input id="noType" type="radio" name="type" value="none">
         </div>
         <div>
             <h3>Chords and length:</h3>
@@ -62,9 +62,6 @@ templ ChordProgForm(){
             </div>
         </div>
         <button type="submit"
-        hx-post="/chordprogress"
-        hx-target="#chordProgDisplay"
-        hx-swap="innerHTML"
         >Get</button>
     </form>
 }

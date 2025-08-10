@@ -1,0 +1,21 @@
+package pages
+
+import "musiikkiProjektit/views/layouts"
+import "musiikkiProjektit/session"
+import "musiikkiProjektit/views/components"
+import "musiikkiProjektit/chorprog"
+
+templ ChordProgDisplay(sessionData session.Session, prog chorprog.Progression){
+    @layouts.Base(sessionData){
+        <h2>
+            Chord progress
+        </h2>
+        <p>
+            Get any of the diatonic chords for the specified key
+        </p>
+
+        <div id="chordProgDisplay">
+            @components.ChordprogDisplay(prog)
+        </div>
+    }
+}

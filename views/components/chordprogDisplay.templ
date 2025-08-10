@@ -1,7 +1,13 @@
 package components
 
-templ ChordprogDisplay() {
-    <h3>Currently displaying ...TODO (esim Ab:1, 3, 5)</h3>
+import "musiikkiProjektit/chorprog"
+
+templ ChordprogDisplay(prog chorprog.Progression) {
+    <h3>Currently displaying chords 
+    for _, n := range prog.ChordNums{
+        {n},
+    }
+     in the key of {prog.Key}, from the mode {prog.ModeText}</h3>
 
     <p>Tässä näkyy nuotit, ja soinnut</p>
 
