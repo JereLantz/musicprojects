@@ -16,17 +16,10 @@ func HandleServeIndex(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(404)
 		return
 	}
-	cookie, err := r.Cookie(session.SessionTokenName)
-	if err != nil{
-		w.WriteHeader(200)
-		pages.Index(session.Session{}).Render(r.Context(), w)
-		return
-	}
-	sessionData, err := session.GetSession(cookie.Value)
+
+	_, sessionData, err := session.GetSessionFromRequest(r)
 	if err != nil {
-		pages.Index(session.Session{}).Render(r.Context(), w)
-		log.Printf("could not get session information when serving the index %s\n", err)
-		return
+		log.Println("HandleServeIndex() fetching session data:", err)
 	}
 
 	w.WriteHeader(200)

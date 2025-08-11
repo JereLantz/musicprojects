@@ -16,18 +16,11 @@ import (
 //
 // Is a http handler function
 func HandleServeNotes(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(session.SessionTokenName)
-	if err != nil{
-		w.WriteHeader(200)
-		pages.Notes(session.Session{}).Render(r.Context(), w)
-		return
-	}
-	sessionData, err := session.GetSession(cookie.Value)
+	_, sessionData, err := session.GetSessionFromRequest(r)
 	if err != nil {
-		w.WriteHeader(200)
-		pages.Notes(session.Session{}).Render(r.Context(), w)
-		return
+		log.Println("HandleServeNotes() fetching session data:",err)
 	}
+
 	w.WriteHeader(200)
 	pages.Notes(sessionData).Render(r.Context(), w)
 }

@@ -12,22 +12,17 @@ import (
 	"time"
 )
 
+// HandleLoginPage renders the login page
 func HandleLoginPage(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie(session.SessionTokenName)
-	if err != nil{
-		w.WriteHeader(200)
-		pages.Login(session.Session{}).Render(r.Context(), w)
-		return
-	}
-	sessionData, err := session.GetSession(cookie.Value)
+	_, sessionData, err := session.GetSessionFromRequest(r)
 	if err != nil {
-		w.WriteHeader(200)
-		pages.Login(session.Session{}).Render(r.Context(), w)
-		return
+		log.Println("HandleLoginPage() fetching session data:",err)
 	}
+
 	w.WriteHeader(200)
 	pages.Login(sessionData).Render(r.Context(), w)
 }
+
 
 func HandleLogin(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	err := r.ParseForm()
