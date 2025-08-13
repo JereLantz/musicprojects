@@ -192,6 +192,7 @@ func main(){
 	handler.HandleFunc("GET /chordprogress", session.HandleSessionMiddleware(handlers.HandleServeChordProg))
 	handler.HandleFunc("GET /keyquiz", session.HandleSessionMiddleware(handlers.HandleServeKeyQuiz))
 	handler.HandleFunc("GET /login", session.HandleSessionMiddleware(handlers.HandleLoginPage))
+	handler.HandleFunc("GET /oldchordprog", session.HandleSessionMiddleware(handlers.HandleServeOldChordProg))
 
 
 
@@ -227,6 +228,7 @@ func main(){
 
 	// Files
 	handler.Handle("GET /index.js", http.FileServer(http.Dir("./public/")))
+	handler.Handle("GET /old-chord-prog.js", http.FileServer(http.Dir("./public/")))
 
 
 	log.Printf("server started on port %s\n", server.Addr)

@@ -1,0 +1,62 @@
+package pages
+
+import "musiikkiProjektit/session"
+import "musiikkiProjektit/views/layouts"
+
+templ OldChordProg(sessionData session.Session){
+    @layouts.Base(sessionData){
+        <h2>Old chord progression</h2>
+        <p>This an older version of the chord progression fetcher</p>
+        <p>But since the newer version is not ready yet, this one works</p>
+
+    <div>
+        <h2>Pick the key and the mode:</h2>
+        <select id="keySelect">
+            <option value="C">C</option>
+            <option value="F">F</option>
+            <option value="Bb">Bb</option>
+            <option value="Eb">Eb</option>
+            <option value="Ab">Ab</option>
+            <option value="Db">Db</option>
+            <option value="Gb">Gb</option>
+            <option value="B">B</option>
+            <option value="E">E</option>
+            <option value="A">A</option>
+            <option value="D">D</option>
+            <option value="G">G</option>
+        </select>
+        <select id="modeSelect">
+            <option value="0">I Ionian (major)</option>
+            <option value="1">ii Dorian</option>
+            <option value="2">iii Phrygian</option>
+            <option value="3">IV Lydian</option>
+            <option value="4">V Moxilydian</option>
+            <option value="5">vi Aeolian (minor)</option>
+            <option value="6">vii Locrian</option>
+        </select>
+        <br>
+
+        <div>
+            <h3>Select the length of the progression</h3>
+            <input type="number" name="lengthInput" id="lenInputNbr" min="1" max="10">
+            <input type="button" value="Set length" id="progLenBtn">
+        </div>
+
+        <h3>Select the progression:</h3>
+        <div id="progSelectors"> </div>
+
+        <br>
+
+        <div id="quickButtons"> </div>
+        <br>
+        <div id="getProgBtn"> </div>
+
+        <p id="displayProgText" class="displayOutput"></p>
+
+        <h1 id="displayProgression" class="displayOutput"></h1>
+    </div>
+
+
+        <script src="/old-chord-prog.js"></script>
+    }
+}

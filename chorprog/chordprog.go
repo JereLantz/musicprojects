@@ -77,8 +77,9 @@ func GetProgFromParams(params url.Values) (Progression, error){
 	return prog, nil
 }
 
-// getChordNames takes the chod numbers a
-func getChordNames(mode int, key string, chordNums []int) ([]string, error){
+// getChordNames takes the mode number, the key, the chord type and the requested chord numbers,
+// and returns the names of the chords as a string array
+func getChordNames(mode int, key string, chordType string, chordNums []int) ([]string, error){
 	//TODO:
 	return []string{}, errors.New("Not implemented")
 }
