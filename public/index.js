@@ -37,7 +37,7 @@ function addChordSelect(){
     }
 
     const newSel = document.createElement("select")
-    newSel.name = "chordSelect"
+    newSel.name = "chord"
     for (let i = 1; i < 8; i++){
         const newOption = document.createElement("option")
         newOption.value = String(i)

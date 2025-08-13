@@ -37,11 +37,17 @@ func GetMode(num int) (string, error){
 	}
 }
 
+// GetModeNumber takes a string representing a mode and returns the corresponding
+// int that represents the mode.
+func GetModeNumber(s string) (int, error){
+	//TODO:
+	return 0, errors.New("not yet implemented")
+}
+
 // GetProgFromParams parses the parameter from url.Values and returns the
 // requested progression in a Progression struct and nil.
 // Or empty progression struct and an error
 func GetProgFromParams(params url.Values) (Progression, error){
-	//TODO:
 	var prog Progression
 	var err error
 	prog.ChordTypes = params.Get("type")
@@ -55,10 +61,24 @@ func GetProgFromParams(params url.Values) (Progression, error){
 		return Progression{}, err
 	}
 
+	reqChords := params["chord"]
+	var chordNums []int
+	for _, c := range reqChords{
+		newChord, _ := strconv.Atoi(c)
+		if newChord >= 1 && newChord <= 7 {
+			chordNums = append(chordNums, newChord)
+		}
+	}
+
+	prog.ChordNums = chordNums
+
+	//TODO:
 	prog.ChordNames = []string{"Ab", "Bb", "C"}
-	/*
-	prog.Chords = params["chord"]
-	*/
-	prog.ChordNums = []int{1,2,3}
 	return prog, nil
+}
+
+// getChordNames takes the chod numbers a
+func getChordNames(mode int, key string, chordNums []int) ([]string, error){
+	//TODO:
+	return []string{}, errors.New("Not implemented")
 }
