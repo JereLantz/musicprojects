@@ -54,6 +54,8 @@ func GetProgFromParams(params url.Values) (Progression, error){
 	if err != nil {
 		return Progression{}, err
 	}
+
+	prog.ChordNames = []string{"Ab", "Bb", "C"}
 	/*
 	prog.Chords = params["chord"]
 	*/

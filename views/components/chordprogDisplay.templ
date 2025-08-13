@@ -3,13 +3,28 @@ package components
 import "musiikkiProjektit/chorprog"
 
 templ ChordprogDisplay(prog chorprog.Progression) {
-    <h3>Currently displaying chords 
-    for _, n := range prog.ChordNums{
-        {n},
+    <h3>Currently displaying:</h3>
+    <p>chords: 
+    for i, n := range prog.ChordNums{
+        if i == 0{
+            {n}
+        }else{
+            ,{n}
+        }
     }
-     in the key of {prog.Key}, from the mode {prog.ModeText}</h3>
+    </p>
+    <p>
+        from the key of: {prog.Key}
+    </p>
+    <p>
+        from the mode: {prog.ModeText}
+    </p>
 
-    <p>Tässä näkyy nuotit, ja soinnut</p>
+    <h3>
+    for _, n := range prog.ChordNames{
+        {n} {" "}
+    }
+    </h3>
 
     <button
     hx-get="/chordprogress"
