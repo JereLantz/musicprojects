@@ -15,8 +15,8 @@ type Progression struct{
 	ChordNames []string
 }
 
-// GetMode returns the modes name based on its number
-func GetMode(num int) (string, error){
+// GetModeName returns the modes name based on its number
+func GetModeName(num int) (string, error){
 	switch num{
 		case 1:
 			return "Ionian (major)", nil
@@ -56,7 +56,7 @@ func GetProgFromParams(params url.Values) (Progression, error){
 	if err != nil {
 		return Progression{}, err
 	}
-	prog.ModeText, err = GetMode(prog.ModeNum)
+	prog.ModeText, err = GetModeName(prog.ModeNum)
 	if err != nil {
 		return Progression{}, err
 	}
