@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type Progression struct{
@@ -40,8 +41,27 @@ func GetModeName(num int) (string, error){
 // GetModeNumber takes a string representing a mode and returns the corresponding
 // int that represents the mode.
 func GetModeNumber(s string) (int, error){
-	//TODO:
-	return 0, errors.New("not yet implemented")
+	loweredS := strings.ToLower(s)
+
+	switch{
+	case strings.Contains(loweredS, "ionian"):
+		return 1, nil
+	case strings.Contains(loweredS, "dorian"):
+		return 2, nil
+	case strings.Contains(loweredS, "phrygian"):
+		return 3, nil
+	//NOTE: mixolydian pitää testaa ennen lydian,koska muuten mixolydian myös palauttaisi aina 4
+	case strings.Contains(loweredS, "mixolydian"):
+		return 5, nil
+	case strings.Contains(loweredS, "lydian"):
+		return 4, nil
+	case strings.Contains(loweredS, "aeolian"):
+		return 6, nil
+	case strings.Contains(loweredS, "locrian"):
+		return 7, nil
+	default:
+		return 0, errors.New("no valid mode expression found")
+	}
 }
 
 // GetProgFromParams parses the parameter from url.Values and returns the
