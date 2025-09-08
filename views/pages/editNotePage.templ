@@ -4,16 +4,38 @@ import "musiikkiProjektit/notes"
 import "musiikkiProjektit/views/components"
 import "musiikkiProjektit/views/layouts"
 import "musiikkiProjektit/session"
+import "strconv"
 
-templ EditNote(session session.Session , note notes.Note) {
+templ EditNote(session session.Session , note notes.Note, errors []string) {
     @layouts.Base(session){
         <h2>Edit note</h2>
         <div>
             <form>
                 @components.EditNote(note)
                 <div>
-                    <button>Save</button>
-                    <button>Cancel</button>
+                    <button
+                    hx-put={"/notes/" + strconv.Itoa(note.Id)}
+                    hx-target="body"
+                    hx-push-url="true"
+                    >Save</button>
+
+                    <button
+                    hx-get="/notes"
+                    hx-push-url="true"
+                    hx-target="body"
+                    >Cancel</button>
+
+                    if len(errors) != 0{
+                        <div id="updateResponse">
+                            <ul>
+                                for _, err := range errors{
+                                    <li>
+                                        {err}
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
                 </div>
             </form>
         </div>

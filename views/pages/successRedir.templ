@@ -1,0 +1,18 @@
+package pages
+
+import "musiikkiProjektit/views/layouts"
+import "musiikkiProjektit/session"
+
+templ SuccessRedir(sessionData session.Session, redirUrl string){
+    @layouts.Base(sessionData){
+        <div>
+            <h1 
+            hx-get={redirUrl}
+            hx-trigger="load delay:3s"
+            hx-target="body"
+            hx-push-url="true"
+            >Success
+            </h1>
+        </div>
+    }
+}

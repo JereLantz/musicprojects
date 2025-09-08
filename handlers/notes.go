@@ -197,5 +197,48 @@ func HandleEditNote(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(400)
 		return
 	}
-	pages.EditNote(session, note).Render(r.Context(), w)
+	pages.EditNote(session, note, []string{}).Render(r.Context(), w)
+}
+
+
+// HandleNoteUpdate handles the note editing process.
+func HandleNoteUpdate(db *sql.DB, w http.ResponseWriter, r *http.Request){
+	var noteData notes.Note
+	var err error
+
+	noteIdStr := r.PathValue("id")
+	noteData.Id, err = strconv.Atoi(noteIdStr) 
+	if err != nil {
+		log.Printf("HandleNoteUpdate() parsing note id from string to int: '%s'\n",err)
+		w.WriteHeader(400)
+		return
+	}
+
+	exists, session, err := session.GetSessionFromRequest(r)
+	if err != nil {
+		log.Printf("HandleNoteUpdate() fething sessiondata: '%s'\n",err)
+		w.WriteHeader(400)
+		return
+	}
+	if !exists {
+		http.Redirect(w, r, "/notes", 303)
+		return
+	}
+
+	r.ParseForm()
+	noteData.Title = r.FormValue("title")
+	noteData.Note = r.FormValue("note")
+
+	inputErrors, err := notes.UpdateNote(db, noteData, session.Username)
+	if err != nil {
+		log.Printf("HandleNoteUpdat() updating saved note: '%s'\n", err)
+		w.WriteHeader(500)
+		return
+	}
+
+	if len(inputErrors) != 0{
+		pages.EditNote(session, noteData, inputErrors).Render(r.Context(), w)
+	}
+
+	pages.SuccessRedir(session, "/notes").Render(r.Context(), w)
 }

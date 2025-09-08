@@ -224,6 +224,9 @@ func main(){
 	handler.HandleFunc("GET /notes/{id}", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HandleEditNote(db, w ,r)
 	})
+	handler.HandleFunc("PUT /notes/{id}", func(w http.ResponseWriter, r *http.Request) {
+		handlers.HandleNoteUpdate(db, w, r)
+	})
 
 
 	// Files
