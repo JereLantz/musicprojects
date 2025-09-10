@@ -2,7 +2,6 @@ package notes
 
 import (
 	"database/sql"
-	"errors"
 	"time"
 )
 
@@ -122,11 +121,27 @@ func GetNote(db *sql.DB, noteID int, username string) (Note, error) {
 }
 
 // UpdateNote checks the note content, then either updates it in the database or
-// returns an error
+// returns an error if problem occurred. If note data is invalid, returns
+// string array containing explanations and nil
 func UpdateNote(db *sql.DB, n Note, username string) ([]string,error){
-	//TODO:
-	// - Tarkista tuleeko request muistiinpanon omistajalta
-	// - tarkista että päivityksen data on valid
+	query := `UPDATE notes
+	SET title = ?, note = ?
+	WHERE note_id = ? AND user_id = (
+		SELECT id
+		FROM users
+		WHERE username = ?
+	);`
+
 	var inputErrors []string
-	return inputErrors, errors.New("Not yet implemented")
+	inputErrors, err := n.Validate()
+	if err != nil {
+		return []string{}, err
+	}
+
+	_, err = db.Exec(query, n.Title, n.Note, n.Id, username)
+	if err != nil{
+		return []string{}, err
+	}
+
+	return inputErrors, nil
 }
