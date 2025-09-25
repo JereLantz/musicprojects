@@ -1,0 +1,23 @@
+- API:t sessio tarkistuksen taakse.
+- Lisää conffitiedostoon mahdollisuus muokata:(?)
+    - sessioiden pituus
+    - sessioiden cleanup funtion kutsujen välistä aikaa
+- Tapa tallentaa käyttäjien state. (session structin sisälle toinen struct "state (?)" jossa nämä kentät?)
+    - Viimeisin haettu chord progress
+    - Key quiz score
+    - Tallenna rekisteröityjen käyttäjien state tietokantaan.
+- siirrä chordprog tiedostosta handlers paketissa business logiikka omaan pakettiin?
+- näytä vain x määrä muistiinpanoja per sivu ja sivujen vaihto(/infinite scroll) toho notes sivulle
+- hakuominaisuus muistiinpanoille
+- Muistiinpanoille muokkaus ominaisuus
+    - Oma sivu joka on polulla /notes/{id}
+        - Sivulla otsikko edit
+        - napit "Save" ja "Cancel"
+            - "Save" vain redirectaa takaisin /notes jos onnistuu
+            - "Cancel" suoraan redirectaa takaisin /notes
+        - sivun yläreunassa voisi olla myös "Back" nappi, joka on perjaatteessa sama kun "cancel"
+- Chord progress sivu
+    - muista että kun niitä moodeja lasketaan, vähennä siitä moodi luvusta 1, että saadaan array index
+- rekisteröinti
+- Tutki sqliten aika tukea, ja mahdollisesti muuta timestampin tallennusmuotoa
+- Kaveri/ryhmä chatti ominaisuus(?)
